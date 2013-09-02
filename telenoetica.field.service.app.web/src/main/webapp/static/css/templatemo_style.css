@@ -5,7 +5,7 @@ body {
 	font-family: Tahoma, Geneva, sans-serif;
 	font-size: 12px;
 	line-height: 1.5em; 
-	background-color: #A2A2A2;
+	background-color: #2190A4;
 	background-repeat: repeat-x;
 	background-position: top
 }
@@ -103,7 +103,7 @@ em { color: #359548 }
 
 #templatemo_body_wrapper {
 	width: 100%;
-	background-color: #A2A2A2;
+	background-color: #2190A4;
 }
 
 #templatemo_wrapper {
@@ -133,7 +133,7 @@ em { color: #359548 }
 	height: 100px; 
 	color: #F60; 
 	text-indent: -10000px; 
-	background: url(../images/htnpng.png) no-repeat
+	background: url(../images/main_logo.png) no-repeat
 }
 
 /* menu */
@@ -496,7 +496,7 @@ em { color: #359548 }
 #templatemo_footer_wrapper {
 	clear: both;
 	height: 85px;
-	background-color: #A2A2A2;
+	background-color: #2190A4;
 }
 
 #templatemo_footer {
@@ -507,7 +507,7 @@ em { color: #359548 }
 	margin: 0 auto;
 	text-align: center;
 	color: #fff;
-	background-color: #A2A2A2;
+	background-color: #2190A4;
 }
 
 #templatemo_footer a {
@@ -539,7 +539,7 @@ color: #FF0000;
 	font-weight: 700;
 	outline: none;
 	border: none;
-	background: url(../images/logout.jpg) right center no-repeat
+	background: url(../images/logout_1.jpg) right center no-repeat
 }
 
 #newspaper-b

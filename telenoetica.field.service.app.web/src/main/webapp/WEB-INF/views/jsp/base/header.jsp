@@ -8,7 +8,7 @@
 <html>
 <head>
 <spring:url value="/resources/css/templatemo_style.css" var="resourceCssUrl"/>
-<spring:url value="/resources/css/custom-theme/jquery-ui-1.10.3.custom.min.css" var="resourceJqUiCssUrl"/>
+<spring:url value="/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" var="resourceJqUiCssUrl"/>
 <spring:url value="/resources/css/ui.jqgrid.css" var="resourceJqGridCssUrl"/>
 <spring:url value="/resources/css/menu.css" var="resourceMenuCssUrl"/>
 

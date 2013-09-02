@@ -39,7 +39,7 @@
 			<div class="buttons">
 				<input class="orangebutton" type="submit" value="Login" />
 			<div>
-				Copyright 2013 HTN/Telenoetica | Designed by HTN/Telenoetica 
+				Copyright & Designed by <a href="http://www.telenoetica.com/" target="_blank">Telenoetica</a> | 2013
 			 </div>
 			</div>
 		</form>

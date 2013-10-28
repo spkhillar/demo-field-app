@@ -10,7 +10,7 @@
 
 	<definition name="home" extends="base.definition">
 		<put-attribute name="title" value="Home" />
-		<put-attribute name="body" value="/WEB-INF/views/tiles/home/home.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/home/site-home.jsp" />
 	</definition>
 	<definition name="base.login.definition"
 		template="/WEB-INF/views/tiles/base/login-layout.jsp">
@@ -64,7 +64,7 @@
 		<put-attribute name="body" value="/WEB-INF/views/tiles/session-timed-out.jsp" />
 	</definition>
 	<definition name="under.construction" extends="base.definition">
-		<put-attribute name="body" value="/WEB-INF/views/tiles/under-construction.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/jsp/under-construction.jsp" />
 	</definition>
 	<definition name="reportDownload.monthlyReport" extends="base.definition">
 		<put-attribute name="title" value="diesel Detail Form" />

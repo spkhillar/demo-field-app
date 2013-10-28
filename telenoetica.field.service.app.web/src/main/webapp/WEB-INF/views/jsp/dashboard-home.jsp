@@ -110,12 +110,12 @@ div.container {
 }
 
 div.left {
-	width: 430px;
+	width: 400px;
 	float: left;
 }
 
 div.right {
-	width: 440px;
+	width: 410px;
 	float: right;
 }
 </style>

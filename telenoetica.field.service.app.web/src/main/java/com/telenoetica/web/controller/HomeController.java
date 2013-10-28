@@ -5,8 +5,10 @@ package com.telenoetica.web.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -289,6 +291,22 @@ public class HomeController extends BaseController {
   public void exportAndroidAppHelp(
       final HttpServletResponse httpServletResponse) {
     androidHomeService.exportAndroidAppHelp(httpServletResponse);
+  }
+  
+  /**
+   * android rest login.
+   * 
+   * @return the home data object
+   */
+  @RequestMapping(value = "/rest/web/dashboardData", method = RequestMethod.GET, produces = "application/json")
+  @ResponseBody
+  public Map dashboardData() {
+	  Map<String, Object> data = new HashMap<String, Object>();
+	    data.put( "Heavy Industry1", "12" );
+	    data.put( "Heavy Industry2", "25" );
+	    data.put( "Heavy Industry3", "50" );
+	    data.put( "Heavy Industry4", "100" );
+    return data;
   }
 
 }

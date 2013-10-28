@@ -16,4 +16,9 @@ public class SingleViewController extends BaseController {
 	public String underConstruction() {
 		return "under-construction";
 	}
+	
+	@RequestMapping(value = "/dashboard/maintenance")
+	public String maintenance() {
+		return "dashboard-maintenance";
+	}
 }

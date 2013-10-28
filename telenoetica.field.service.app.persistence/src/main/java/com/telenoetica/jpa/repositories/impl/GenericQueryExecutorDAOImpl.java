@@ -203,6 +203,25 @@ public class GenericQueryExecutorDAOImpl implements GenericQueryExecutorDAO {
     setParameters(query, params);
     long count = (Long) query.getSingleResult();
     return count;
+  }
+  
+  /**
+   * Execute projected query.
+   *
+   * @param <T> the generic type
+   * @param ejbql the ejbql
+   * @param params the params
+   * @return the list
+   * @see com.telenoetica.jpa.repositories.GenericQueryExecutorDAO#
+   * executeProjectedQuery(java.lang.String, java.util.Map)
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> List<T> executeSQLProjectedQuery(final String sqlString,
+    final Map<String, Object> params) {
+    Query query = entityManager.createNativeQuery(sqlString);
+    setParameters(query, params);
+    return query.getResultList();
 
   }
 }

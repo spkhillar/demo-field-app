@@ -1,6 +1,8 @@
 package com.telenoetica.jpa.test;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -15,6 +17,17 @@ public class GenericQueryExecutorTest extends BaseTest {
 	@Autowired
 	private GenericQueryExecutorDAO genericQueryExecutorDAO;
 
+	@Test
+	public void testSql(){
+		String sqlString = "select id, name from fault";
+		List<Object []> list =  genericQueryExecutorDAO.executeSQLProjectedQuery(sqlString, null);
+		
+		for (Object[] objects : list) {
+			System.err.println("...objects.."+Arrays.toString(objects));
+		}
+	}
+	
+	
 	@Test
 	public void testGenericQuery() {
 		/*

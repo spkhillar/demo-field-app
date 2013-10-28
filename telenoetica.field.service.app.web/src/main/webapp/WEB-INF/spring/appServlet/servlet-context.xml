@@ -10,21 +10,13 @@
 		infrastructure -->
 
 <bean id="customObjectMapper" class="com.telenoetica.util.model.CustomObjectMapper"/>
-
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven>
 		<mvc:message-converters>
 	       <ref bean="jacksonMessageConverter"/>
 	    </mvc:message-converters>
 	</mvc:annotation-driven>
-<!-- 	<bean id="annotationExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
-		<property name="messageConverters">
-			<list>
-				<ref bean="jacksonMessageConverter"/>
-			</list>
-		</property>
-	</bean>
- -->	<bean id="jacksonMessageConverter"
+	<bean id="jacksonMessageConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 		<property name="objectMapper" ref="customObjectMapper" />
 	</bean>
@@ -35,11 +27,6 @@
 	
 	 <mvc:default-servlet-handler/> 
 
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
-		in the /WEB-INF/views directory -->
-	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
-		<property name="prefix" value="/WEB-INF/views/" /> <property name="suffix" 
-		value=".jsp" /> </bean> -->
 	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="viewClass"	value="org.springframework.web.servlet.view.tiles3.TilesView" />
 		<property name="order" value="1" />
@@ -63,7 +50,14 @@
 		  </property>	  
 	  </bean>
 	  
-	  <bean id="tilesConfigurer"
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"	value="org.springframework.web.servlet.view.JstlView" />
+		<property name="order" value="3" />
+		<property name="prefix" value="/WEB-INF/views/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	  
+	<bean id="tilesConfigurer"
 		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
 		<property name="definitions">
 			<list>
@@ -73,7 +67,4 @@
 	</bean>
 	<context:annotation-config />
 	<context:component-scan base-package="com.telenoetica.web" />
-
-
-
 </beans>

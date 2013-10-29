@@ -27,6 +27,13 @@ public class GenericQueryExecutorTest extends BaseTest {
 		}
 	}
 	
+	@Test
+	public void testMedian(){
+		String sqlString = "select floor(count(id)/2) from DieselVisit";
+		genericQueryExecutorDAO.executeProjectedQuery(sqlString);
+		
+	}
+	
 	
 	@Test
 	public void testGenericQuery() {

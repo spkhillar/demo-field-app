@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ import com.telenoetica.service.excel.ExcelLayoutService;
 import com.telenoetica.service.util.ApplicationServiceException;
 import com.telenoetica.service.util.ExcelRendererModel;
 import com.telenoetica.service.util.ExcelWriter;
+import com.telenoetica.service.util.Median;
 import com.telenoetica.service.util.ServiceUtil;
 
 /**
@@ -323,8 +325,32 @@ DieselVisitService {
    */
   @Override
   public long findRecordCount(final Map<String, Object> params) {
-
     String ejbql = "select count(*) from DieselVisit where createdAt >= :startDate AND createdAt < :endDate";
     return genericQueryExecutorDAO.findCount(ejbql, params);
+  }
+
+  /**
+   * 
+   */
+  @Override
+  public Median medianDiesel(String fieldName, Date startDate, Date endDate) {
+    String ejbql = "select floor(count(dv.id)/2) from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate";
+    Median median = null;
+    Map<String, Object> params = new HashMap<String, Object>(2);
+    params.put("startDate", startDate);
+    params.put("endDate", endDate);
+    List<Integer> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql,params);
+    if(CollectionUtils.isEmpty(list)){
+      logger.debug("not found..");
+    }else{
+      int medianRecord = list.get(0).intValue();
+      ejbql = "select dv."+fieldName+" from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate order by dv."+fieldName+" asc";
+      Page<Long> page = genericQueryExecutorDAO.executeQuery(ejbql, params, medianRecord, 1);
+      Long medianValue = page.getContent().get(0);
+      ejbql = "select dv.site.name,dv."+fieldName+" from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate order by dv."+fieldName+" desc";
+      List<Object[]> dataList = genericQueryExecutorDAO.executeProjectedQuery(ejbql,params);
+      median = ServiceUtil.mapMedian(medianValue.intValue(), dataList);
+    }
+    return median;
   }
 }

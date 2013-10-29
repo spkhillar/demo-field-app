@@ -222,6 +222,55 @@ public class GenericQueryExecutorDAOImpl implements GenericQueryExecutorDAO {
     Query query = entityManager.createNativeQuery(sqlString);
     setParameters(query, params);
     return query.getResultList();
+  }
+  
+  /**
+   * Execute query.
+   *
+   * @param <T> the generic type
+   * @param ejbql the ejbql
+   * @param clazz the clazz
+   * @param page the page
+   * @param pageSize the page size
+   * @return the page
+   * @see
+   * com.telenoetica.jpa.repositories.GenericQueryExecutorDAO#executeQuery
+   * (java.lang.String, java.lang.Class, int, int)
+   */
+  @Override
+  public <T> Page<T> executeQuery(final String ejbql,
+    final int page, final int pageSize) {
+    Map<String, Object> params = null;
+    return executeQuery(ejbql, params, page, pageSize);
+  }
 
+  /**
+   * Execute query.
+   *
+   * @param <T> the generic type
+   * @param ejbql the ejbql
+   * @param clazz the clazz
+   * @param params the params
+   * @param page the page
+   * @param pageSize the page size
+   * @return the page
+   * @see
+   * com.telenoetica.jpa.repositories.GenericQueryExecutorDAO#executeQuery
+   * (java.lang.String, java.lang.Class, java.util.Map, int, int)
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public <T> Page<T> executeQuery(final String ejbql,
+    final Map<String, Object> params, final int page, final int pageSize) {
+    LOGGER.debug("Executing Query.." + ejbql);
+    Query query = entityManager.createQuery(ejbql);
+    setParameters(query, params);
+    int first = (page - 1) * pageSize;
+    query.setFirstResult(first);
+    query.setMaxResults(pageSize);
+    List<T> collection = query.getResultList();
+    PageRequest pageRequest = new PageRequest(page - 1, pageSize);
+    Page<T> finalResult = new PageImpl<T>(collection, pageRequest, collection.size());
+    return finalResult;
   }
 }

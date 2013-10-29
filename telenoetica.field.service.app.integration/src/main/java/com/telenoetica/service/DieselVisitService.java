@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 
 import com.telenoetica.jpa.entities.DieselVisit;
 import com.telenoetica.jpa.entities.Site;
+import com.telenoetica.service.util.Median;
 
 
 /**
@@ -86,5 +87,7 @@ public interface DieselVisitService extends BaseService<DieselVisit> {
    * @return
    */
   public long findRecordCount(Map<String, Object> params);
+
+  Median medianDiesel(String fieldName, Date startDate, Date endDate);
 
 }

@@ -111,4 +111,9 @@ public interface GenericQueryExecutorDAO {
 	<T> List<T> executeSQLProjectedQuery(String sqlString,
 			Map<String, Object> params);
 
+	<T> Page<T> executeQuery(String ejbql, int page, int pageSize);
+
+	<T> Page<T> executeQuery(String ejbql, Map<String, Object> params, int page,
+			int pageSize);
+
 }

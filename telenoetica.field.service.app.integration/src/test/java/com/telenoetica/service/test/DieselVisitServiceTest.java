@@ -35,7 +35,7 @@ public class DieselVisitServiceTest extends BaseServiceTest {
 	public void testVisitMdedian() {
 		Date endDate = new Date();
 		Date startDate = DateUtils.addDays(endDate, -30);
-		dieselVisitService.medianDiesel("dieselReceivedLtrs", startDate,
+		dieselVisitService.calculateDieselMedian("dieselReceivedLtrs", startDate,
 				endDate);
 	}
 

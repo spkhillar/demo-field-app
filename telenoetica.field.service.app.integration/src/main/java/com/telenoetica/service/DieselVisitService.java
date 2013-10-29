@@ -88,6 +88,6 @@ public interface DieselVisitService extends BaseService<DieselVisit> {
    */
   public long findRecordCount(Map<String, Object> params);
 
-  Median medianDiesel(String fieldName, Date startDate, Date endDate);
+  Median calculateDieselMedian(String fieldName, Date startDate, Date endDate);
 
 }

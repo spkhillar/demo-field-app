@@ -322,15 +322,13 @@ public class ServiceUtil {
     //File file = new File(pathname)
     return null;
   }
-  
+
   public static Median mapMedian(int medianValue,List<Object[]> values){
-    List<MedianFields> list = new ArrayList<MedianFields>(values.size());
-    MedianFields medianField = null;
+    Median median = new Median();
+    median.setMedianValue(medianValue);
     for (Object[] medianFields : values) {
-      medianField = new MedianFields(medianFields[0].toString(), Integer.parseInt(medianFields[1].toString()));
-      list.add(medianField);
+      median.addListDataElement(medianFields);
     }
-    //File file = new File(pathname)
-    return new Median(medianValue, list);
+    return median;
   }
 }

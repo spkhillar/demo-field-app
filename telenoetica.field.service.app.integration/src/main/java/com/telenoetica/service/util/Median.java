@@ -1,13 +1,16 @@
 package com.telenoetica.service.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Median {
 
   private int medianValue;
-  
+
+  private List<Object[]> listData = new ArrayList<Object[]>();
+
   private List<MedianFields> medianFields;
-  
+
   public Median() {
   }
 
@@ -32,8 +35,18 @@ public class Median {
   public void setMedianFields(List<MedianFields> medianFields) {
     this.medianFields = medianFields;
   }
-  
-  
-  
-  
+
+  public List<Object[]> getListData() {
+    return listData;
+  }
+
+  public void setListData(List<Object[]> listData) {
+    this.listData = listData;
+  }
+
+  public void addListDataElement(Object[] listDataElement) {
+    this.listData.add(listDataElement);
+  }
+
+
 }

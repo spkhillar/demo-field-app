@@ -333,7 +333,7 @@ DieselVisitService {
    * 
    */
   @Override
-  public Median medianDiesel(String fieldName, Date startDate, Date endDate) {
+  public Median calculateDieselMedian(String fieldName, Date startDate, Date endDate) {
     String ejbql = "select floor(count(dv.id)/2) from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate";
     Median median = null;
     Map<String, Object> params = new HashMap<String, Object>(2);

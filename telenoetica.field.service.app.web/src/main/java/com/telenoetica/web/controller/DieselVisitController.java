@@ -3,6 +3,7 @@
  */
 package com.telenoetica.web.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.telenoetica.jpa.entities.DieselVisit;
 import com.telenoetica.service.DieselVisitService;
 import com.telenoetica.service.util.ApplicationConstants;
+import com.telenoetica.service.util.Median;
 import com.telenoetica.web.rest.RestResponse;
 import com.telenoetica.web.util.DomainObjectMapper;
 import com.telenoetica.web.util.JqGridResponse;
@@ -266,5 +269,19 @@ public class DieselVisitController extends AbstractJqGridFilterController {
   @Override
   public Map<String, String> getFilterExcludedPropertyOrderMapping() {
     return excludedPropOrderMapping;
+  }
+
+  /**
+   * Gets the users page.
+   * 
+   * @return the users page
+   */
+  @RequestMapping(value = "/median")
+  @ResponseBody
+  public Median computeMedian(final Model model) {
+    Date endDate = new Date();
+    Date startDate = DateUtils.addDays(endDate, -30);
+    Median median = dieselVisitService.calculateDieselMedian("dieselReceivedLtrs", startDate, endDate);
+    return median;
   }
 }

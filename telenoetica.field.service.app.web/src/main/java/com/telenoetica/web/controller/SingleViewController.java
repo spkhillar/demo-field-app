@@ -19,11 +19,16 @@ public class SingleViewController extends BaseController {
 
   @RequestMapping(value = "/dashboard/diesel")
   public String diesel() {
+    return "dashboard-diesel-input";
+  }
+
+  @RequestMapping(value = "/dashboard/maintenance")
+  public String maintenance() {
+    return "dashboard-maintenance";
+  }
+
+  @RequestMapping(value = "/dashboard/diesel/report")
+  public String dieselMedianReport() {
     return "dashboard-diesel";
   }
-	
-	@RequestMapping(value = "/dashboard/maintenance")
-	public String maintenance() {
-		return "dashboard-maintenance";
-	}
 }

@@ -331,4 +331,26 @@ public class ServiceUtil {
     }
     return median;
   }
+
+  public static Median mapDieselMedian(int medianValue, List<Object[]> values) {
+    Median median = new Median();
+    median.setMedianValue(medianValue);
+    for (Object[] medianFields : values) {
+      median.addListDataElement(medianFields);
+    }
+    return median;
+  }
+
+  public static int computeMedian(List<Long> list) {
+    int size = list.size();
+    if (size == 1) {
+      return list.get(0).intValue();
+    }
+    int mod = size % 2;
+    int position = mod;
+    if (mod != 0) {
+      position = mod + 1;
+    }
+    return list.get(position - 1).intValue();
+  }
 }

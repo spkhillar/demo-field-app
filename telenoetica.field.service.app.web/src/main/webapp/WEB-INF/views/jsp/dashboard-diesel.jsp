@@ -43,6 +43,9 @@ var webContextPathDiesel = "${pageContext.request.contextPath}";;
 			async : false,
 			success : function(data, textStatus) {
 				if(data != null && data.medianValue != null && data.listData != null){
+					if(data.listData.length >50){
+						$("#dieselMedianChart").css("width", "+=2300");
+					}
 					drawGraph(data.medianValue,data.listData);
 				}
 				console.log('....data....', data);
@@ -61,11 +64,14 @@ var webContextPathDiesel = "${pageContext.request.contextPath}";;
 		        drawGridlines: false
 		    };	
 		     
-		    plot1 = $.jqplot('chart1', [s1], {
+		    plot1 = $.jqplot('dieselMedianChart', [listData], {
 		        series:[{
 		            renderer:$.jqplot.BarRenderer,
 		            rendererOptions: {
 		                barWidth: 10
+		            },
+		            pointLabels: { 
+		            	show: true 
 		            }
 		        }],
 		        axes: {
@@ -96,7 +102,7 @@ var webContextPathDiesel = "${pageContext.request.contextPath}";;
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	<div style="height: 700px; width: auto">
-	<div id="chart1" style="height:500px;width:2000px; margin-left:10px;">
+	<div id="dieselMedianChart" style="height:500px;width:700px; margin-left:10px;">
 	</div>
 	<br>
 	</div>

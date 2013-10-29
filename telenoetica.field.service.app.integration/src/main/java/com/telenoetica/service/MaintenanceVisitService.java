@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 
 import com.telenoetica.jpa.entities.MaintenanceVisit;
 import com.telenoetica.jpa.entities.Site;
+import com.telenoetica.service.util.Median;
 
 /**
  * The Interface MaintenanceVisitService.
@@ -95,4 +96,6 @@ public interface MaintenanceVisitService extends BaseService<MaintenanceVisit> {
    * @return
    */
   public List<MaintenanceVisit> findBySiteAndCreatedAtBetween(final Site site,Date forDate);
+
+Median getSpareUsageList(Date startDate, Date endDate);
 }

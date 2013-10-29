@@ -24,10 +24,7 @@ $().ready(function(){
 	
 	var jsonurl = webContextPath + "/rest/web/dashboardData";
 	var homePageData = populateDataForHomeScreen(jsonurl);
-	  var data = [
-	    ['Heavy Industry', 12],['Retail', 9], ['Light Industry', 14], 
-	    ['Out of home', 16],['Commuting', 7], ['Orientation', 9]
-	  ];
+	  var data = homePageData;
 	  var plot1 = jQuery.jqplot ('chart1', [data], 
 	    { 
 	      seriesDefaults: {
@@ -36,7 +33,8 @@ $().ready(function(){
 	        rendererOptions: {
 	          // Put data labels on the pie slices.
 	          // By default, labels show the percentage of the slice.
-	          showDataLabels: true
+	        	showDataLabels: true,
+	            dataLabels: 'value'
 	        }
 	      }, 
 	      legend: { show:true, location: 'e' }
@@ -52,7 +50,7 @@ function populateDataForHomeScreen(url) {
 		async : false,
 		url : url,
 		success : function(data) {
-			ret = data;
+			ret = data.listData;
 		}
 	});
 	return ret;
@@ -78,10 +76,7 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<div style="height: 700px;">
-	<div id="chart1" style="height:200px;width:600px; margin-left:130px;">
-	
+	<div id="chart1" style="height:825px;width:850px;">
 	</div>
-<h1>Page Under Construction. Page will be available shortly.</h1>
 </body>
 </html>

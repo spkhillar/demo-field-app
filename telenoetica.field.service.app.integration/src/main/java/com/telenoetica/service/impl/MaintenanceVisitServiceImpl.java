@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ import com.telenoetica.service.excel.ExcelLayoutService;
 import com.telenoetica.service.util.ApplicationServiceException;
 import com.telenoetica.service.util.ExcelRendererModel;
 import com.telenoetica.service.util.ExcelWriter;
+import com.telenoetica.service.util.Median;
 import com.telenoetica.service.util.ServiceUtil;
 
 /**
@@ -317,4 +319,37 @@ public class MaintenanceVisitServiceImpl extends AbstractBaseService implements 
     return maintenanceVisitDAO.findBySiteAndCreatedAtBetween(site, startDate, finalEndDate);
   }
 
+  /**
+   * 
+   */
+  @Override
+  public Median getSpareUsageList(Date startDate, Date endDate) {
+    Median median = null;
+    Map<String, Object> params = new HashMap<String, Object>(2);
+    params.put("startDate", startDate);
+    params.put("endDate", endDate);      
+      String sqlString ="SELECT x.spare, COUNT(x.spare) FROM ("+
+    		  		"SELECT mv.spares_used_items_replaced1 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced1 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+ 
+    		  		" UNION ALL SELECT mv.spares_used_items_replaced2 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced2 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.spares_used_items_replaced3 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced3 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.spares_used_items_replaced4 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced4 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.spares_used_items_replaced5 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced5 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.spares_used_items_replaced6 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced6 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.cosumables_used1 AS spare FROM maintenance_visit mv where mv.cosumables_used1 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.cosumables_used2 AS spare FROM maintenance_visit mv where mv.cosumables_used2 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.cosumables_used3 AS spare FROM maintenance_visit mv where mv.cosumables_used3 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.cosumables_used4 AS spare FROM maintenance_visit mv where mv.cosumables_used4 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.cosumables_used5 AS spare FROM maintenance_visit mv where mv.cosumables_used5 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" UNION ALL SELECT mv.cosumables_used6 AS spare FROM maintenance_visit mv where mv.cosumables_used6 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
+    		  		" ) x " +
+    		  		" WHERE x.spare IS NOT NULL"+
+    		  		" GROUP BY x.spare;";
+   
+      List<Object[]> finalDataList =
+          genericQueryExecutorDAO.executeSQLProjectedQuery(sqlString,params);
+      median = ServiceUtil.mapMedian(0, finalDataList);
+
+    return median;
+  }
+  
 }

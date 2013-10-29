@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ import com.telenoetica.service.MaintenanceVisitService;
 import com.telenoetica.service.RoutineVisitService;
 import com.telenoetica.service.SiteService;
 import com.telenoetica.service.SpareService;
+import com.telenoetica.service.util.Median;
+import com.telenoetica.service.util.ServiceUtil;
 import com.telenoetica.util.model.HomeAndroidObject;
 import com.telenoetica.util.model.HomeDataObject;
 import com.telenoetica.web.rest.RestResponse;
@@ -300,13 +303,22 @@ public class HomeController extends BaseController {
    */
   @RequestMapping(value = "/rest/web/dashboardData", method = RequestMethod.GET, produces = "application/json")
   @ResponseBody
-  public Map dashboardData() {
-	  Map<String, Object> data = new HashMap<String, Object>();
+  public Median dashboardData() {
+	  
+	  	/*Date endDate = new Date();
+	    Date startDate = DateUtils.addDays(endDate, -30);*/
+	    Date startdate = ServiceUtil.getDateInFormat("31/01/2013", "dd/MM/yyyy");
+	    Date enddate = ServiceUtil.getDateInFormat("31/12/2013", "dd/MM/yyyy");
+
+	    Median median = maintenanceVisitService.getSpareUsageList( startdate, enddate);
+	    return median;
+	  
+	  /*Map<String, Object> data = new HashMap<String, Object>();
 	    data.put( "Heavy Industry1", "12" );
 	    data.put( "Heavy Industry2", "25" );
 	    data.put( "Heavy Industry3", "50" );
 	    data.put( "Heavy Industry4", "100" );
-    return data;
+    return data;*/
   }
 
 }

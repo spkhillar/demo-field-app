@@ -90,4 +90,8 @@ public interface DieselVisitService extends BaseService<DieselVisit> {
 
   Median calculateDieselMedian(String fieldName, Date startDate, Date endDate);
 
+  Median calculateTopDieselConsumers(String fieldName, Date startDate, Date endDate);
+
+  Date getMaxDateCreated();
+
 }

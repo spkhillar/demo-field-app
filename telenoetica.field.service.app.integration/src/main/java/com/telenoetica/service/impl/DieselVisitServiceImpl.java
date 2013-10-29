@@ -363,4 +363,40 @@ DieselVisitService {
     }
     return median;
   }
+
+  @Override
+  public Median calculateTopDieselConsumers(String fieldName, Date startDate, Date endDate) {
+    String ejbql =
+        "select count(dv.id) from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate";
+    Median median = null;
+    Map<String, Object> params = new HashMap<String, Object>(2);
+    params.put("startDate", startDate);
+    params.put("endDate", endDate);
+    long records = genericQueryExecutorDAO.findCount(ejbql, params);
+    if (records == 0) {
+      logger.debug("not found..");
+    } else {
+
+      ejbql =
+          "select dv.site.name,sum(dv."
+              + fieldName
+              + ") from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate group by dv.site.name order by dv."
+              + fieldName + " desc";
+      Page<Object[]> finalDataList = genericQueryExecutorDAO.executeQuery(ejbql, params, 1, 10);
+      median = ServiceUtil.mapMedian(0, finalDataList.getContent());
+    }
+    return median;
+  }
+
+  @Override
+  public Date getMaxDateCreated() {
+    String ejbql = "select max(dv.createdAt) from DieselVisit dv ";
+    Median median = null;
+    Date date = null;
+    List<Date> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql);
+    if (CollectionUtils.isNotEmpty(list)) {
+      date = list.get(0);
+    }
+    return date;
+  }
 }

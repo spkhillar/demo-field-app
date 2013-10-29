@@ -11,11 +11,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,7 @@ import com.telenoetica.jpa.entities.DieselVisit;
 import com.telenoetica.service.DieselVisitService;
 import com.telenoetica.service.util.ApplicationConstants;
 import com.telenoetica.service.util.Median;
+import com.telenoetica.service.util.ServiceUtil;
 import com.telenoetica.web.rest.RestResponse;
 import com.telenoetica.web.util.DomainObjectMapper;
 import com.telenoetica.web.util.JqGridResponse;
@@ -48,8 +51,7 @@ public class DieselVisitController extends AbstractJqGridFilterController {
   private DieselVisitService dieselVisitService;
 
   /** The excluded props in filter. */
-  private final String[] excludedPropsInFilter = new String[] { "userId",
-      "siteId", "createdAt", "transferredSiteId" };
+  private final String[] excludedPropsInFilter = new String[] { "userId", "siteId", "createdAt", "transferredSiteId" };
 
   /** The Constant excludedPropQueryMapping. */
   private static final Map<String, String> excludedPropQueryMapping = new HashMap<String, String>();
@@ -60,13 +62,11 @@ public class DieselVisitController extends AbstractJqGridFilterController {
     excludedPropQueryMapping.put("userId", "user.userName");
     excludedPropQueryMapping.put("siteId", "site.name");
     excludedPropQueryMapping.put("createdAt", "date(createdAt)");
-    excludedPropQueryMapping.put("transferredSiteId",
-        "transferredSite.name");
+    excludedPropQueryMapping.put("transferredSiteId", "transferredSite.name");
 
     excludedPropOrderMapping.put("userId", "user.userName");
     excludedPropOrderMapping.put("siteId", "site.name");
-    excludedPropOrderMapping.put("transferredSiteId",
-        "transferredSite.name");
+    excludedPropOrderMapping.put("transferredSiteId", "transferredSite.name");
   }
 
   /**
@@ -77,8 +77,7 @@ public class DieselVisitController extends AbstractJqGridFilterController {
   @ModelAttribute("dieselForm")
   public DieselVisit createFormBean() {
     DieselVisit dieselVisit = new DieselVisit();
-    dieselVisit
-    .setDieselTransferOrBulkSupply(ApplicationConstants.BULK_TRANSFER);
+    dieselVisit.setDieselTransferOrBulkSupply(ApplicationConstants.BULK_TRANSFER);
     return dieselVisit;
   }
 
@@ -86,15 +85,14 @@ public class DieselVisitController extends AbstractJqGridFilterController {
    * Save.
    * 
    * @param dieselVisit
-   *            the diesel visit
+   *          the diesel visit
    * @return the string
    */
   @RequestMapping(value = "/save", method = RequestMethod.POST)
   @ResponseBody
   public String save(final DieselVisit dieselVisit) {
     dieselVisit.setUserId(getCurrentLoggedinUserName());
-    DieselVisit savedDieselVisit = dieselVisitService
-        .saveOrUpdate(dieselVisit);
+    DieselVisit savedDieselVisit = dieselVisitService.saveOrUpdate(dieselVisit);
     return "Saved Successfuly with id:" + savedDieselVisit.getId();
   }
 
@@ -113,16 +111,14 @@ public class DieselVisitController extends AbstractJqGridFilterController {
    * Save api.
    * 
    * @param dieselVisit
-   *            the diesel visit
+   *          the diesel visit
    * @return the rest response
    */
   @RequestMapping(value = "/rest", method = RequestMethod.POST, consumes = { "application/json" }, produces = { "application/json" })
   @ResponseBody
   public RestResponse saveApi(@RequestBody final DieselVisit dieselVisit) {
-    DieselVisit savedDieselVisit = dieselVisitService
-        .saveOrUpdate(dieselVisit);
-    RestResponse response = new RestResponse(0,
-      "Saved Successfuly with id:" + savedDieselVisit.getId());
+    DieselVisit savedDieselVisit = dieselVisitService.saveOrUpdate(dieselVisit);
+    RestResponse response = new RestResponse(0, "Saved Successfuly with id:" + savedDieselVisit.getId());
     return response;
   }
 
@@ -130,7 +126,7 @@ public class DieselVisitController extends AbstractJqGridFilterController {
    * Save api.
    * 
    * @param id
-   *            the id
+   *          the id
    * @return the diesel visit
    */
   @RequestMapping(value = "/rest/{id}", method = RequestMethod.GET, produces = { "application/json" })
@@ -154,23 +150,22 @@ public class DieselVisitController extends AbstractJqGridFilterController {
    * Records.
    * 
    * @param search
-   *            the search
+   *          the search
    * @param filters
-   *            the filters
+   *          the filters
    * @param page
-   *            the page
+   *          the page
    * @param rows
-   *            the rows
+   *          the rows
    * @param sidx
-   *            the sidx
+   *          the sidx
    * @param sord
-   *            the sord
+   *          the sord
    * @return the jq grid response
    */
   @RequestMapping(value = "/records", produces = "application/json")
   public @ResponseBody
-  JqGridResponse<DieselVisit> records(
-    @RequestParam("_search") final Boolean search,
+  JqGridResponse<DieselVisit> records(@RequestParam("_search") final Boolean search,
     @RequestParam(value = "filters", required = false) final String filters,
     @RequestParam(value = "page", required = false) final Integer page,
     @RequestParam(value = "rows", required = false) final Integer rows,
@@ -181,22 +176,17 @@ public class DieselVisitController extends AbstractJqGridFilterController {
     if (search) {
 
       Map<String, Object> paramObject = new LinkedHashMap<String, Object>();
-      String filterPredicate = getFilteredRecords(filters, sord, sidx,
-        paramObject, DieselVisit.class);
-      dieselVisits = dieselVisitService.findALL(page, rows,
-        filterPredicate, paramObject);
+      String filterPredicate = getFilteredRecords(filters, sord, sidx, paramObject, DieselVisit.class);
+      dieselVisits = dieselVisitService.findALL(page, rows, filterPredicate, paramObject);
     } else {
       dieselVisits = dieselVisitService.findALL(page, rows, sord, sidx);
     }
     List<Object> list = DomainObjectMapper.listEntities(dieselVisits);
     JqGridResponse<DieselVisit> response = new JqGridResponse<DieselVisit>();
     response.setRows(list);
-    response.setRecords(Long.valueOf(dieselVisits.getTotalElements())
-      .toString());
-    response.setTotal(Integer.valueOf(dieselVisits.getTotalPages())
-      .toString());
-    response.setPage(Integer.valueOf(dieselVisits.getNumber() + 1)
-      .toString());
+    response.setRecords(Long.valueOf(dieselVisits.getTotalElements()).toString());
+    response.setTotal(Integer.valueOf(dieselVisits.getTotalPages()).toString());
+    response.setPage(Integer.valueOf(dieselVisits.getNumber() + 1).toString());
     return response;
   }
 
@@ -204,38 +194,34 @@ public class DieselVisitController extends AbstractJqGridFilterController {
    * Export.
    * 
    * @param search
-   *            the search
+   *          the search
    * @param filters
-   *            the filters
+   *          the filters
    * @param page
-   *            the page
+   *          the page
    * @param rows
-   *            the rows
+   *          the rows
    * @param sidx
-   *            the sidx
+   *          the sidx
    * @param sord
-   *            the sord
+   *          the sord
    * @param httpServletResponse
-   *            the http servlet response
+   *          the http servlet response
    */
   @RequestMapping(value = "/export")
-  public void export(
-      @RequestParam("_search") final Boolean search,
+  public void export(@RequestParam("_search") final Boolean search,
       @RequestParam(value = "filters", required = false) final String filters,
       @RequestParam(value = "page", required = false) final Integer page,
       @RequestParam(value = "rows", required = false) final Integer rows,
       @RequestParam(value = "sidx", required = false) final String sidx,
-      @RequestParam(value = "sord", required = false) final String sord,
-      final HttpServletResponse httpServletResponse) {
+      @RequestParam(value = "sord", required = false) final String sord, final HttpServletResponse httpServletResponse) {
     String filterPredicate = null;
     Map<String, Object> paramObject = null;
     if (search) {
       paramObject = new LinkedHashMap<String, Object>();
-      filterPredicate = getFilteredRecords(filters, sord, sidx,
-        paramObject, DieselVisit.class);
+      filterPredicate = getFilteredRecords(filters, sord, sidx, paramObject, DieselVisit.class);
     }
-    dieselVisitService.exportReport(filterPredicate, paramObject,
-      httpServletResponse, "diesel-visit.xls");
+    dieselVisitService.exportReport(filterPredicate, paramObject, httpServletResponse, "diesel-visit.xls");
   }
 
   /**
@@ -276,12 +262,41 @@ public class DieselVisitController extends AbstractJqGridFilterController {
    * 
    * @return the users page
    */
-  @RequestMapping(value = "/median")
+  @RequestMapping(value = "/median/{filterField}/{startDate}/{endDate}")
   @ResponseBody
-  public Median computeMedian(final Model model) {
-    Date endDate = new Date();
+  public Median computeMedian(ModelMap map, @PathVariable final String filterField,
+      @PathVariable final String startDate, @PathVariable String endDate) {
+    Date startDate1 = null;
+    Date endDate1 = null;
+    if (StringUtils.equals(startDate, "null") || StringUtils.equals(endDate, "null")) {
+      endDate1 = dieselVisitService.getMaxDateCreated();
+      System.err.println("..max date..." + endDate1);
+      if (endDate1 == null) {
+        endDate1 = new Date();
+      } else {
+        endDate1 = DateUtils.addHours(endDate1, 1);
+      }
+      startDate1 = DateUtils.addDays(endDate1, -30);
+    } else {
+      startDate1 = ServiceUtil.getDateInFormat(startDate, "dd-MM-yyyy");
+      endDate1 = ServiceUtil.getDateInFormat(endDate, "dd-MM-yyyy");
+    }
+    Median median = dieselVisitService.calculateDieselMedian(filterField, startDate1, endDate1);
+    return median;
+  }
+
+  @RequestMapping(value = "/top10")
+  @ResponseBody
+  public Median calculateTopDieselConsumers(final Model model) {
+    Date endDate = dieselVisitService.getMaxDateCreated();
+    System.err.println("..max date..." + endDate);
+    if (endDate == null) {
+      endDate = new Date();
+    } else {
+      endDate = DateUtils.addHours(endDate, 1);
+    }
     Date startDate = DateUtils.addDays(endDate, -30);
-    Median median = dieselVisitService.calculateDieselMedian("dieselReceivedLtrs", startDate, endDate);
+    Median median = dieselVisitService.calculateTopDieselConsumers("dieselReceivedLtrs", startDate, endDate);
     return median;
   }
 }

@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -346,10 +347,14 @@ public class ServiceUtil {
     if (size == 1) {
       return list.get(0).intValue();
     }
+    Collections.sort(list);
     int mod = size % 2;
     int position = mod;
     if (mod != 0) {
+      mod = size / 2;
       position = mod + 1;
+    } else {
+      position = size / 2;
     }
     return list.get(position - 1).intValue();
   }

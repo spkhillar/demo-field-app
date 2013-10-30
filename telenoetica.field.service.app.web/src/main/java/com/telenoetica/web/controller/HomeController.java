@@ -320,5 +320,23 @@ public class HomeController extends BaseController {
 	    data.put( "Heavy Industry4", "100" );
     return data;*/
   }
+  
+  /**
+   * android rest login.
+   * 
+   * @return the home data object
+   */
+  @RequestMapping(value = "/rest/web/customerImpacted", method = RequestMethod.GET, produces = "application/json")
+  @ResponseBody
+  public Median getCustomerImpactedData() {
+	  
+	  	/*Date endDate = new Date();
+	    Date startDate = DateUtils.addDays(endDate, -30);*/
+	    Date startdate = ServiceUtil.getDateInFormat("31/01/2013", "dd/MM/yyyy");
+	    Date enddate = ServiceUtil.getDateInFormat("31/12/2013", "dd/MM/yyyy");
+
+	    Median median = callOutVisitService.getCustomerImpactedList( startdate, enddate);
+	    return median;
+  }
 
 }

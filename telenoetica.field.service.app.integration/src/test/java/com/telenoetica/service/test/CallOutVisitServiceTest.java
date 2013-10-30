@@ -11,6 +11,8 @@ import com.telenoetica.jpa.entities.User;
 import com.telenoetica.jpa.repositories.SiteDAO;
 import com.telenoetica.jpa.repositories.UserDAO;
 import com.telenoetica.service.CallOutVisitService;
+import com.telenoetica.service.util.Median;
+import com.telenoetica.service.util.ServiceUtil;
 
 public class CallOutVisitServiceTest extends BaseServiceTest{
 
@@ -24,32 +26,12 @@ public class CallOutVisitServiceTest extends BaseServiceTest{
   private UserDAO userDAO;
 
   @Test
-  public void test(){
+  public void testFindBySite(){
+	Median median = null;
+    Date startdate = ServiceUtil.getDateInFormat("31/01/2013", "dd/MM/yyyy");
+    Date enddate = ServiceUtil.getDateInFormat("31/12/2013", "dd/MM/yyyy");
 
-    User user = userDAO.findOne(1L);
-    Site site = siteDao.findOne(6L);
-
-    CallOutVisit callOutVisit = new CallOutVisit();
-    callOutVisit.setUser(user);
-    callOutVisit.setSite(site);
-    callOutVisit.setTimeComplainReceived(new Date());
-    callOutVisit.settimeFaultResolved(new Date());
-    callOutVisit.setTimeReachedToSite(new Date());
-
-    callOutVisit = callOutVisitService.saveOrUpdate(callOutVisit);
-
-    System.err.println("...Saved..."+callOutVisit);
-
-    callOutVisit.setAccessCode("BBBBB");
-
-    callOutVisitService.saveOrUpdate(callOutVisit);
-
-    callOutVisit = callOutVisitService.retrieve(callOutVisit.getId());
-
-
-
-    System.err.println("...Retrieved..."+callOutVisit);
-
-    callOutVisitService.getCallOutVisits(1);
+    median =callOutVisitService.getCustomerImpactedList(startdate, enddate);
+    System.out.println("Finish");
   }
 }

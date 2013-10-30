@@ -3,6 +3,7 @@
  */
 package com.telenoetica.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 
 import com.telenoetica.jpa.entities.CallOutVisit;
+import com.telenoetica.service.util.Median;
 
 /**
  * The Interface CallOutVisitService.
@@ -87,4 +89,6 @@ public interface CallOutVisitService extends BaseService<CallOutVisit> {
    * @return the long
    */
   long findRecordCount(Map<String, Object> params);
+
+Median getCustomerImpactedList(Date startDate, Date endDate);
 }

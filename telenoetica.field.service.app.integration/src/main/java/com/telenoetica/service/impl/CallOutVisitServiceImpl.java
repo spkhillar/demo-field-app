@@ -5,6 +5,8 @@ package com.telenoetica.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +33,7 @@ import com.telenoetica.service.excel.ExcelFillerService;
 import com.telenoetica.service.excel.ExcelLayoutService;
 import com.telenoetica.service.util.ExcelRendererModel;
 import com.telenoetica.service.util.ExcelWriter;
+import com.telenoetica.service.util.Median;
 import com.telenoetica.service.util.ServiceUtil;
 
 /**
@@ -286,6 +289,31 @@ CallOutVisitService {
 
     String ejbql = "select count(*) from CallOutVisit where createdAt >= :startDate AND createdAt < :endDate";
     return genericQueryExecutorDAO.findCount(ejbql, params);
+  }
+  
+  /**
+   * 
+   */
+  @Override
+  public Median getCustomerImpactedList(Date startDate, Date endDate) {
+    Median median = null;
+    Map<String, Object> params = new HashMap<String, Object>(2);
+    params.put("startDate", startDate);
+    params.put("endDate", endDate);      
+      String sqlString ="SELECT x.customer, COUNT(x.customer) FROM (" +
+    		  		 "SELECT cv.customer1_impacted AS customer FROM call_out_visit cv where cv.customer1_impacted is not null and trim(cv.customer1_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+ 
+    		  		 " UNION ALL SELECT cv.customer2_impacted AS customer FROM call_out_visit cv where cv.customer2_impacted is not null and trim(cv.customer2_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+ 
+    		  		 " UNION ALL SELECT cv.customer3_impacted AS customer FROM call_out_visit cv where cv.customer3_impacted is not null and trim(cv.customer3_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
+    		  		 " UNION ALL SELECT cv.customer4_impacted AS customer FROM call_out_visit cv where cv.customer4_impacted is not null and trim(cv.customer4_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
+    		  		 ") x "  
+    		  		 +" WHERE x.customer IS NOT NULL"
+    		  		 +" GROUP BY x.customer;";
+   
+      List<Object[]> finalDataList =
+          genericQueryExecutorDAO.executeSQLProjectedQuery(sqlString,params);
+      median = ServiceUtil.mapMedian(0, finalDataList);
+
+    return median;
   }
 
 }

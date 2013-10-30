@@ -4,30 +4,31 @@
 <html>
 <jsp:include page="dashboard-main.jsp"></jsp:include>
 <head>
-
 <script type="text/javascript">
 
 $().ready(function(){
 	
-	var jsonurl = webContextPath + "/rest/web/dashboardData";
+	var jsonurl = webContextPath + "/rest/web/customerImpacted";
 	var homePageData = populateDataForHomeScreen(jsonurl);
 	  var data = homePageData;
-	  var plot1 = jQuery.jqplot ('chart1', [data], 
+	  var plot1 = jQuery.jqplot ('chart1',  [data], 
 	    { 
-	      seriesDefaults: {
-	        // Make this a pie chart.
-	        renderer: jQuery.jqplot.PieRenderer, 
-	        rendererOptions: {
-	          // Put data labels on the pie slices.
-	          // By default, labels show the percentage of the slice.
-	        	showDataLabels: true,
-	            dataLabels: 'value'
-	        }
-	      }, 
-	      legend: { show:true, location: 'e' }
-	    }
-	  );
-	});
+		  title: 'Top Customers Impacted',
+		    series:[{renderer:$.jqplot.BarRenderer}],
+		    axesDefaults: {
+		        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+		        tickOptions: {
+		          angle: -30,
+		          fontSize: '10pt'
+		        }
+		    },
+		    axes: {
+		      xaxis: {
+		        renderer: $.jqplot.CategoryAxisRenderer
+		      }
+		    }
+		  });
+		});
 	
 function populateDataForHomeScreen(url) {
 	var ret = null;

@@ -53,4 +53,9 @@ public class SingleViewController extends BaseController {
     map.put("endDate", endDate);
     return "dashboard-diesel";
   }
+  
+  @RequestMapping(value = "/dashboard/callOut")
+  public String callOut() {
+    return "dashboard-callout";
+  }
 }

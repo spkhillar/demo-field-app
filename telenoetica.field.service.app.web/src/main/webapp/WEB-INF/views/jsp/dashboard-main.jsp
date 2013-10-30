@@ -19,6 +19,8 @@
 <spring:url value="/resources/js/jqplot.canvasAxisLabelRenderer.min.js" var="canvasAxisLabelRendererUrl"/>
 <spring:url value="/resources/js/jqplot.pointLabels.min.js" var="pointLabelsUrl"/>
 <spring:url value="/resources/js/jquery.jqplot.min.js" var="jqplotUrl"/>
+<spring:url value="/resources/js/jqplot.pieRenderer.min.js" var="jqplotPieRendererUrl"/>
+
 
 <link href="${resourceJqplotCssUrl}" rel="stylesheet" type="text/css" />
 <link href="${resourceCmxUrl}" rel="stylesheet" type="text/css" />
@@ -36,6 +38,7 @@
 <script type="text/javascript" src="${canvasAxisTickRendererUrl}"></script>
 <script type="text/javascript" src="${canvasOverlayUrl}"></script>
 <script type="text/javascript" src="${canvasAxisLabelRendererUrl}"></script>
+<script type="text/javascript" src="${jqplotPieRendererUrl}"></script>
 
 </head>
 <body>

@@ -9,28 +9,11 @@
 $().ready(function(){
 	
 	var jsonurl = webContextPath + "/rest/web/customerImpacted";
-	var homePageData = populateDataForHomeScreen(jsonurl);
+	var homePageData = populateDataForCvScreen(jsonurl);
 	  var data = homePageData;
-	  var plot1 = jQuery.jqplot ('chart1',  [data], 
-	    { 
-		  title: 'Top Customers Impacted',
-		    series:[{renderer:$.jqplot.BarRenderer}],
-		    axesDefaults: {
-		        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
-		        tickOptions: {
-		          angle: -30,
-		          fontSize: '10pt'
-		        }
-		    },
-		    axes: {
-		      xaxis: {
-		        renderer: $.jqplot.CategoryAxisRenderer
-		      }
-		    }
-		  });
 		});
 	
-function populateDataForHomeScreen(url) {
+function populateDataForCvScreen(url) {
 	var ret = null;
 	$.ajax({
 		// have to use synchronous here, else the function 
@@ -39,9 +22,30 @@ function populateDataForHomeScreen(url) {
 		url : url,
 		success : function(data) {
 			ret = data.listData;
+			drawBarChartForCV(ret);
 		}
 	});
 	return ret;
+}
+
+function drawBarChartForCV(data){
+	 var plot1 = jQuery.jqplot ('barChartForCVDashboard',  [data], 
+			    { 
+				  title: 'Top Customers Impacted',
+				    series:[{renderer:$.jqplot.BarRenderer}],
+				    axesDefaults: {
+				        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+				        tickOptions: {
+				          angle: -30,
+				          fontSize: '10pt'
+				        }
+				    },
+				    axes: {
+				      xaxis: {
+				        renderer: $.jqplot.CategoryAxisRenderer
+				      }
+				    }
+				  });
 }
 </script>
 <style type="text/css">
@@ -64,7 +68,7 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<div id="chart1" style="height:825px;width:850px;">
+	<div id="barChartForCVDashboard" style="height:825px;width:850px;">
 	</div>
 </body>
 </html>

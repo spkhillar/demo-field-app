@@ -10,26 +10,13 @@
 $().ready(function(){
 	
 	var jsonurl = webContextPath + "/rest/web/dashboardData";
-	var homePageData = populateDataForHomeScreen(jsonurl);
+	var homePageData = populateDataForMvScreen(jsonurl);
 	  var data = homePageData;
-	  var plot1 = jQuery.jqplot ('chart1', [data], 
-	    { 
-	      seriesDefaults: {
-	        // Make this a pie chart.
-	        renderer: jQuery.jqplot.PieRenderer, 
-	        rendererOptions: {
-	          // Put data labels on the pie slices.
-	          // By default, labels show the percentage of the slice.
-	        	showDataLabels: true,
-	            dataLabels: 'value'
-	        }
-	      }, 
-	      legend: { show:true, location: 'e' }
-	    }
-	  );
+	 
 	});
 	
-function populateDataForHomeScreen(url) {
+	
+function populateDataForMvScreen(url) {
 	var ret = null;
 	$.ajax({
 		// have to use synchronous here, else the function 
@@ -38,9 +25,30 @@ function populateDataForHomeScreen(url) {
 		url : url,
 		success : function(data) {
 			ret = data.listData;
+			drawPieChart(ret);
 		}
 	});
 	return ret;
+}
+
+function drawPieChart(data){
+	
+	 var plot1 = jQuery.jqplot ('pieChartForMvDashboard', [data], 
+			    { 
+			      seriesDefaults: {
+			        // Make this a pie chart.
+			        renderer: jQuery.jqplot.PieRenderer, 
+			        rendererOptions: {
+			          // Put data labels on the pie slices.
+			          // By default, labels show the percentage of the slice.
+			        	showDataLabels: true,
+			            dataLabels: 'value'
+			        }
+			      }, 
+			      legend: { show:true, location: 'e' }
+			    }
+			  );
+	
 }
 </script>
 <style type="text/css">
@@ -63,7 +71,7 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<div id="chart1" style="height:825px;width:850px;">
+	<div id="pieChartForMvDashboard" style="height:825px;width:850px;">
 	</div>
 </body>
 </html>

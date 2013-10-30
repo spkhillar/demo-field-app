@@ -15,10 +15,12 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -60,6 +62,8 @@ public class ServiceUtil {
     field = getAllFields(MaintenanceVisit.class);
     fieldMapping.put(clazzName, field);
   }
+
+  private static final Random RAND = new Random();
 
   /**
    * Instantiates a new service util.
@@ -357,5 +361,28 @@ public class ServiceUtil {
       position = size / 2;
     }
     return list.get(position - 1).intValue();
+  }
+
+  public static Date randomDate() {
+    int Low = 1;
+    int High = 90;
+    int random = RAND.nextInt(High - Low) + Low;
+    Date date = new Date();
+    return DateUtils.addDays(date, -random);
+  }
+
+  public static int randomInt(int start, int end) {
+    int Low = start;
+    int High = end;
+    int random = RAND.nextInt(High - Low) + Low;
+    return random;
+  }
+
+  public static Date randomDate(int lastDays) {
+    int Low = 1;
+    int High = lastDays;
+    int random = RAND.nextInt(High - Low) + Low;
+    Date date = new Date();
+    return DateUtils.addDays(date, -random);
   }
 }

@@ -102,8 +102,8 @@ DieselVisitService {
       Site site = getSite(visit.getSiteId());
       visit.setSite(site);
     } else {
-      throw new ApplicationServiceException(
-          "Site is required for creating a Routine Visit");
+      Site site = getSite(visit.getSite().getName());
+      visit.setSite(site);
     }
 
     if (StringUtils.isNotBlank(visit.getTransferredSiteId())) {
@@ -358,6 +358,7 @@ DieselVisitService {
               + fieldName + " desc";
       List<Object[]> finalDataList =
           genericQueryExecutorDAO.executeProjectedQuery(ejbql, params);
+      logger.debug("medianRecord=" + medianRecord + ":Size =" + finalDataList.size());
       median = ServiceUtil.mapMedian(medianRecord, finalDataList);
 
     }
@@ -391,7 +392,6 @@ DieselVisitService {
   @Override
   public Date getMaxDateCreated() {
     String ejbql = "select max(dv.createdAt) from DieselVisit dv ";
-    Median median = null;
     Date date = null;
     List<Date> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql);
     if (CollectionUtils.isNotEmpty(list)) {

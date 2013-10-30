@@ -3,13 +3,9 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page session="false"%>
 <html>
-<spring:url value="/resources/css/screen.css" var="resourceCmxUrl"/>
-<link href="${resourceCmxUrl}" rel="stylesheet" type="text/css" />
+<jsp:include page="dashboard-main.jsp"></jsp:include>
 <head>
-
-
 <script type="text/javascript">
-
 	$().ready(function() {
 		$("#openDieselReportBtn").button();
 		$("#startDate").datepicker({
@@ -73,6 +69,13 @@
 		            	show: true 
 		            }
 		        }],
+		        axesDefaults: {
+		            tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+		            tickOptions: {
+		              angle: -30,
+		              fontSize: '10pt'
+		            }
+		        },
 		        axes: {
 		            xaxis: {
 		                renderer: $.jqplot.CategoryAxisRenderer,

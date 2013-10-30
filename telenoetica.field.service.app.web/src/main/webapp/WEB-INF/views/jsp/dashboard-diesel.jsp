@@ -2,40 +2,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page session="false"%>
 <html>
+<jsp:include page="dashboard-main.jsp"></jsp:include>
 <head>
-<spring:url value="/resources/css/jquery.jqplot.min.css" var="resourceJqplotCssUrl"/>
-<spring:url value="/resources/js/jquery-1.9.1.min.js" var="resourceJq1Url"/>
-<spring:url value="/resources/js/jqplot.barRenderer.min.js" var="barRendererUrl"/>
-<spring:url value="/resources/js/jqplot.categoryAxisRenderer.min.js" var="categoryAxisRendererUrl"/>
-
-<spring:url value="/resources/js/jqplot.canvasTextRenderer.min.js" var="canvasTextRendererUrl"/>
-<spring:url value="/resources/js/jqplot.canvasAxisTickRenderer.min.js" var="canvasAxisTickRendererUrl"/>
-<spring:url value="/resources/js/jqplot.canvasOverlay.min.js" var="canvasOverlayUrl"/>
-<spring:url value="/resources/js/jqplot.canvasAxisLabelRenderer.min.js" var="canvasAxisLabelRendererUrl"/>
-
-<spring:url value="/resources/js/jqplot.pointLabels.min.js" var="pointLabelsUrl"/>
-<spring:url value="/resources/js/jquery.jqplot.min.js" var="jqplotUrl"/>
-
-<link href="${resourceJqplotCssUrl}" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript" src="${resourceJq1Url}"></script>
-<script type="text/javascript" src="${jqplotUrl}"></script>
-<script type="text/javascript" src="${barRendererUrl}"></script>
-<script type="text/javascript" src="${categoryAxisRendererUrl}"></script>
-<script type="text/javascript" src="${pointLabelsUrl}"></script>
-
-<script type="text/javascript" src="${canvasTextRendererUrl}"></script>
-<script type="text/javascript" src="${canvasAxisTickRendererUrl}"></script>
-<script type="text/javascript" src="${canvasOverlayUrl}"></script>
-<script type="text/javascript" src="${canvasAxisLabelRendererUrl}"></script>
-
 <script type="text/javascript">
-
 var webContextPathDiesel = "${pageContext.request.contextPath}";;
 	$().ready(function() {
 		dieselMedianData();
 	});
-	
 	function dieselMedianData(){
 		var filterField = $("#filterField").val();
 		var startDate = $("#startDate").val();
@@ -47,8 +20,16 @@ var webContextPathDiesel = "${pageContext.request.contextPath}";;
 			async : false,
 			success : function(data, textStatus) {
 				if(data != null && data.medianValue != null && data.listData != null){
-					if(data.listData.length >50){
-						$("#dieselMedianChart").css("width", "+=2300");
+					if(data.listData.length <=100){
+						$("#dieselMedianChart").css("width", "+=2000");
+					}else if(data.listData.length <=200){
+						$("#dieselMedianChart").css("width", "+=3000");
+					}else if(data.listData.length <=300){
+						$("#dieselMedianChart").css("width", "+=5000");
+					}else if(data.listData.length <=500){
+						$("#dieselMedianChart").css("width", "+=10000");
+					}else {
+						$("#dieselMedianChart").css("width", "+=30000");
 					}
 					drawGraph(data.medianValue,data.listData);
 				}
@@ -77,7 +58,13 @@ var webContextPathDiesel = "${pageContext.request.contextPath}";;
 		            pointLabels: { 
 		            	show: true 
 		            }
-		        }],
+		        }],axesDefaults: {
+		            tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+		            tickOptions: {
+		              angle: -30,
+		              fontSize: '10pt'
+		            }
+		        },
 		        axes: {
 		            xaxis: {
 		                renderer: $.jqplot.CategoryAxisRenderer,

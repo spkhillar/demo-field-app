@@ -9210,4 +9210,11 @@
 	    update site s set s.name=lpad(s.name,length(s.name)+3,upper(concat(SUBSTRING(s.state,1,2),'-')));
 	</sql>
 	</changeSet>
+	
+	<changeSet id="1374865179138-5" author="Shiv">
+	<sql>
+	    <comment>update site</comment>
+	   ALTER IGNORE TABLE site ADD UNIQUE INDEX idx_site_name (name);
+	</sql>
+	</changeSet>
 </databaseChangeLog>

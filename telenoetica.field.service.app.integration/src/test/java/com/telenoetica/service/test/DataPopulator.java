@@ -49,7 +49,7 @@ public class DataPopulator extends BaseServiceTest {
       index = ServiceUtil.randomInt(0, dieselVendorListSize);
       DieselVendor dieselVendor = dieselVendorList.get(index);
       DieselVisit dieselVisit =
-          new DieselVisit(user, site, String.valueOf(ServiceUtil.randomInt(0, 999999)), "DRN-"
+          new DieselVisit(user, null, String.valueOf(ServiceUtil.randomInt(0, 999999)), "DRN-"
               + ServiceUtil.randomInt(0, 999999),
               "Bulk", null, dieselVendor.getName(), Long.valueOf(ServiceUtil.randomInt(
                 0,
@@ -58,7 +58,12 @@ public class DataPopulator extends BaseServiceTest {
                   .randomInt(0, 6000)), Long.valueOf(ServiceUtil.randomInt(0, 6000)), Long.valueOf(ServiceUtil.randomInt(0,
                     30000)), Long.valueOf(ServiceUtil.randomInt(0, 30000)), true,
                     true, ServiceUtil.randomDate());
-      dieselVisitService.saveOrUpdate(dieselVisit);
+      dieselVisit.setSiteId(site.getName());
+      try {
+        dieselVisitService.saveOrUpdate(dieselVisit);
+      } catch (Exception e) {
+        System.err.println("..." + e.getMessage());
+      }
     }
 
     long count2 = genericQueryExecutorDAO.findCount(ejbql, null);

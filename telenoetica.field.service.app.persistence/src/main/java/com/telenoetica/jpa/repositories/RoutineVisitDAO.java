@@ -12,4 +12,5 @@ import com.telenoetica.jpa.entities.RoutineVisit;
  */
 public interface RoutineVisitDAO extends JpaRepository<RoutineVisit, Long> {
 
+
 }

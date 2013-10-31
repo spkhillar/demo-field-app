@@ -299,4 +299,19 @@ public class DieselVisitController extends AbstractJqGridFilterController {
     Median median = dieselVisitService.calculateTopDieselConsumers("dieselReceivedLtrs", startDate, endDate);
     return median;
   }
+
+  @RequestMapping(value = "/last7DaysReceived")
+  @ResponseBody
+  public Median computeDieselReceivedBetween(final Model model) {
+    Date endDate = dieselVisitService.getMaxDateCreated();
+    System.err.println("..max date..." + endDate);
+    if (endDate == null) {
+      endDate = new Date();
+    } else {
+      endDate = DateUtils.addHours(endDate, 1);
+    }
+    Date startDate = DateUtils.addDays(endDate, -7);
+    Median median = dieselVisitService.computeDieselReceivedBetween(startDate, endDate);
+    return median;
+  }
 }

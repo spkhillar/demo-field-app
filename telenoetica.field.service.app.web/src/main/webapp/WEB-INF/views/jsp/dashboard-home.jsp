@@ -2,21 +2,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page session="false"%>
 <html>
+<jsp:include page="dashboard-main.jsp"></jsp:include>
 <head>
-<spring:url value="/resources/css/jquery.jqplot.min.css" var="resourceJqplotCssUrl"/>
-
-<spring:url value="/resources/js/jqplot.barRenderer.min.js" var="barRendererUrl"/>
-<spring:url value="/resources/js/jqplot.categoryAxisRenderer.min.js" var="categoryAxisRendererUrl"/>
-<spring:url value="/resources/js/jqplot.pointLabels.min.js" var="pointLabelsUrl"/>
-<spring:url value="/resources/js/jquery.jqplot.min.js" var="jqplotUrl"/>
-
-<link href="${resourceJqplotCssUrl}" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript" src="${jqplotUrl}"></script>
-<script type="text/javascript" src="${barRendererUrl}"></script>
-<script type="text/javascript" src="${categoryAxisRendererUrl}"></script>
-<script type="text/javascript" src="${pointLabelsUrl}"></script>
-
 <script type="text/javascript">
 
 	$().ready(function() {
@@ -28,6 +15,7 @@
 		populateDieselTableData(homePageData.dieselVisits);
 		populateMaintenanceTableData(homePageData.maintenanceVisits);
 		drawGraph(homePageData.chartData);
+		drawGraphForDieselRecieved();
 	});
 
 	function populateDataForHomeScreen(url) {
@@ -42,6 +30,19 @@
 			}
 		});
 		return ret;
+	}
+	
+	function drawGraphForDieselRecieved() {
+		var url = webContextPath + "/diesel/last7DaysReceived";
+		$.ajax({
+			// have to use synchronous here, else the function 
+			// will return before the data is fetched
+			async : true,
+			url : url,
+			success : function(data) {
+				drawGraphForLast7DaysDieselReceivedBySites(data.listData);
+			}
+		});
 	}
 
 	function populateRoutineTableData(input) {
@@ -79,27 +80,80 @@
 		$.jqplot.config.enablePlugins = true;
 		var ticks = [ 'Routine Visit', 'Call-Out Visit', 'Diesel Visit',
 				'Maintenance Visit' ];
-		plot1 = $.jqplot('chartdiv', [ input ], {
-			// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
-			title : "Visit Analysis Chart(Last 7 Days)",
-			seriesDefaults : {
-				renderer : $.jqplot.BarRenderer,
-				pointLabels : {
-					show : true
-				}
-			},
-			axes : {
-				xaxis : {
-					renderer : $.jqplot.CategoryAxisRenderer,
-					ticks : ticks
-				}
-			},
-			seriesColors : [ "#FF9D19" ],
-			highlighter : {
-				show : false
-			}
-		});
-
+		 var grid = {
+			        gridLineWidth: 0.5,
+			        gridLineColor: 'rgb(235,235,235)',
+			        drawGridlines: false
+			    };	
+		 
+		 plot1 = $.jqplot('chartLast7DaysDiv', [ input ], {
+				// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+				title : "Visit Analysis Chart(Last 7 Days)",
+				 series:[{
+			            renderer:$.jqplot.BarRenderer,
+			            rendererOptions: {
+			                barWidth: 10
+			            },
+			            pointLabels: { 
+			            	show: true 
+			            }
+			        }],
+			        axesDefaults: {
+			            tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+			            tickOptions: {
+			              angle: -30,
+			              fontSize: '10pt'
+			            }
+			        },
+			        axes: {
+			            xaxis: {
+			                renderer: $.jqplot.CategoryAxisRenderer,
+			                autoscale : true,
+							ticks : ticks
+			            }
+			        },
+			        grid: grid
+			    });
+	}
+	function drawGraphForLast7DaysDieselReceivedBySites(input){
+		
+		if(input == null){
+			input = [[0,0]];
+		}
+		 var grid = {
+			        gridLineWidth: 0.5,
+			        gridLineColor: 'rgb(235,235,235)',
+			        drawGridlines: false
+			    };	
+		 
+		 plot1 = $.jqplot('chartLast7DaysDieselDiv', [ input ], {
+				// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+				title : "Disel Received (Last 7 Days)",
+				 series:[{
+			            renderer:$.jqplot.BarRenderer,
+			            rendererOptions: {
+			                barWidth: 10
+			            },
+			            pointLabels: { 
+			            	show: true 
+			            }
+			        }],
+			        axesDefaults: {
+			            tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+			            tickOptions: {
+			              angle: -30,
+			              fontSize: '10pt'
+			            }
+			        },
+			        axes: {
+			            xaxis: {
+			                renderer: $.jqplot.CategoryAxisRenderer,
+			                autoscale : true,
+			            }
+			        },
+			        grid: grid
+			    });
+		
 	}
 </script>
 <style type="text/css">
@@ -122,9 +176,16 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<div style="height: 700px;">
-	<div id="chartdiv" style="height:200px;width:600px; margin-left:130px;">
-	
+	<div style="height: 700px;" id ="dashBoardHomeDiv">
+	<div class="container" style="overflow: hidden; width: 100%">	
+		<div class="left">	
+			<div id="chartLast7DaysDiv" style="height:300px;">
+			</div>
+		</div>	
+		<div class="right">	
+			<div id="chartLast7DaysDieselDiv" style="height:300px;">
+			</div>
+		</div>
 	</div>
 	<br>
 	<div class="container" style="overflow: hidden; width: 100%">	

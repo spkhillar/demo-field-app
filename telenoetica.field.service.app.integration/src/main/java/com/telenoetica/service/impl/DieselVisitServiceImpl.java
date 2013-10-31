@@ -325,7 +325,7 @@ DieselVisitService {
    */
   @Override
   public long findRecordCount(final Map<String, Object> params) {
-    String ejbql = "select count(*) from DieselVisit where createdAt >= :startDate AND createdAt < :endDate";
+    String ejbql = "select count(*) from DieselVisit where createdAt >= :startDateTime AND createdAt < :endDateTime";
     return genericQueryExecutorDAO.findCount(ejbql, params);
   }
 
@@ -335,18 +335,18 @@ DieselVisitService {
   @Override
   public Median calculateDieselMedian(String fieldName, Date startDate, Date endDate) {
     String ejbql =
-        "select count(dv.id) from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate";
+        "select count(dv.id) from DieselVisit dv where dv.createdAt >= :startDateTime AND dv.createdAt < :endDateTime";
     Median median = null;
     Map<String, Object> params = new HashMap<String, Object>(2);
-    params.put("startDate", startDate);
-    params.put("endDate", endDate);
+    params.put("startDateTime", startDate);
+    params.put("endDateTime", endDate);
     long records = genericQueryExecutorDAO.findCount(ejbql, params);
     if (records == 0) {
       logger.debug("not found..");
     }else{
       ejbql =
           "select sum(dv." + fieldName
-          + ") from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate group by dv.site order by dv."
+          + ") from DieselVisit dv where dv.createdAt >= :startDateTime AND dv.createdAt < :endDateTime group by dv.site order by dv."
           + fieldName + " asc";
       List<Long> dataList = genericQueryExecutorDAO.executeProjectedQuery(ejbql, params);
       int medianRecord = ServiceUtil.computeMedian(dataList);
@@ -354,7 +354,7 @@ DieselVisitService {
       ejbql =
           "select dv.site.name,sum(dv."
               + fieldName
-              + ") from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate group by dv.site.name order by dv."
+              + ") from DieselVisit dv where dv.createdAt >= :startDateTime AND dv.createdAt < :endDateTime group by dv.site.name order by dv."
               + fieldName + " desc";
       List<Object[]> finalDataList =
           genericQueryExecutorDAO.executeProjectedQuery(ejbql, params);
@@ -368,11 +368,11 @@ DieselVisitService {
   @Override
   public Median calculateTopDieselConsumers(String fieldName, Date startDate, Date endDate) {
     String ejbql =
-        "select count(dv.id) from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate";
+        "select count(dv.id) from DieselVisit dv where dv.createdAt >= :startDateTime AND dv.createdAt < :endDateTime";
     Median median = null;
     Map<String, Object> params = new HashMap<String, Object>(2);
-    params.put("startDate", startDate);
-    params.put("endDate", endDate);
+    params.put("startDateTime", startDate);
+    params.put("endDateTime", endDate);
     long records = genericQueryExecutorDAO.findCount(ejbql, params);
     if (records == 0) {
       logger.debug("not found..");
@@ -381,7 +381,7 @@ DieselVisitService {
       ejbql =
           "select dv.site.name,sum(dv."
               + fieldName
-              + ") from DieselVisit dv where dv.createdAt >= :startDate AND dv.createdAt < :endDate group by dv.site.name order by dv."
+              + ") from DieselVisit dv where dv.createdAt >= :startDateTime AND dv.createdAt < :endDateTime group by dv.site.name order by dv."
               + fieldName + " desc";
       Page<Object[]> finalDataList = genericQueryExecutorDAO.executeQuery(ejbql, params, 1, 10);
       median = ServiceUtil.mapMedian(0, finalDataList.getContent());
@@ -394,9 +394,27 @@ DieselVisitService {
     String ejbql = "select max(dv.createdAt) from DieselVisit dv ";
     Date date = null;
     List<Date> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql);
-    if (CollectionUtils.isNotEmpty(list)) {
+    if (CollectionUtils.isNotEmpty(list) && list.get(0) != null) {
       date = list.get(0);
     }
     return date;
+  }
+
+  @Override
+  public Median computeDieselReceivedBetween(Date startDateTime, Date endDateTime) {
+    Median median = null;
+    String ejbql =
+        "select date_format(dv.createdAt,'%d-%m-%Y'),sum(dv.dieselReceivedLtrs) from DieselVisit dv where "
+            + "dv.createdAt >= :startDateTime AND dv.createdAt < :endDateTime "
+            + "group by day(dv.createdAt) order by day(dv.createdAt)";
+
+    Map<String, Object> params = new HashMap<String, Object>(2);
+    params.put("startDateTime", startDateTime);
+    params.put("endDateTime", endDateTime);
+    List<Object[]> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql, params);
+    if (CollectionUtils.isNotEmpty(list)) {
+      median = ServiceUtil.mapMedian(0, list);
+    }
+    return median;
   }
 }

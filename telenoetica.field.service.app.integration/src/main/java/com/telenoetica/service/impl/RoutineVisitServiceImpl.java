@@ -5,12 +5,14 @@ package com.telenoetica.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -335,9 +337,19 @@ RoutineVisitService {
    */
   @Override
   public long findRecordCount(final Map<String, Object> params) {
-
-    String ejbql = "select count(*) from RoutineVisit where createdAt >= :startDate AND createdAt < :endDate";
+    String ejbql = "select count(*) from RoutineVisit where createdAt >= :startDateTime AND createdAt < :endDateTime";
     return genericQueryExecutorDAO.findCount(ejbql, params);
+  }
+
+  @Override
+  public Date getMaxDateCreated() {
+    String ejbql = "select max(dv.createdAt) from RoutineVisit dv ";
+    Date date = null;
+    List<Date> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql);
+    if (CollectionUtils.isNotEmpty(list) && list.get(0) != null) {
+      date = list.get(0);
+    }
+    return date;
   }
 
 }

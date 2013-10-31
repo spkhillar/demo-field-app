@@ -18,8 +18,8 @@
 <div id="tabs">
   <ul>
     <li><a href="${contextPath}/jsp/dashboard/home">Home</a></li>
-    <li><a href="${contextPath}/jsp/dashboard/diesel" target="_blank">Disel Visit</a></li>
-    <li><a href="${contextPath}/jsp/dashboard/maintenance">Maintenance Vist</a></li>
+    <li><a href="${contextPath}/jsp/dashboard/diesel" target="_blank">Diesel Visit</a></li>
+    <li><a href="${contextPath}/jsp/dashboard/maintenance">Maintenance Visit</a></li>
     <li><a href="${contextPath}/jsp/dashboard/callOut">Call-Out Visit</a></li>
   </ul>
  </div>

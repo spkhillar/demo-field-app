@@ -42,7 +42,7 @@ public class DieselVisitServiceTest extends BaseServiceTest {
       endDate);
   }
 
-  @Test
+  // @Test
   public void testTopTenDieselConsumers() {
     Date endDate = dieselVisitService.getMaxDateCreated();
     System.err.println("..max date..." + endDate);
@@ -54,6 +54,16 @@ public class DieselVisitServiceTest extends BaseServiceTest {
     Date startDate = DateUtils.addDays(endDate, -30);
     Median median = dieselVisitService.calculateTopDieselConsumers("dieselReceivedLtrs", startDate, endDate);
     System.err.println("..Median.." + median);
+  }
+
+  @Test
+  public void testComputeDieselReceivedBetween() {
+    Date endDate = dieselVisitService.getMaxDateCreated();
+    if (endDate == null) {
+      endDate = new Date();
+    }
+    Date startDate = DateUtils.addDays(endDate, -7);
+    dieselVisitService.computeDieselReceivedBetween(startDate, endDate);
   }
 
 }

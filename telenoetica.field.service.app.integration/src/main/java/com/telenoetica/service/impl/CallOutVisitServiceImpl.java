@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -287,10 +288,10 @@ CallOutVisitService {
   @Override
   public long findRecordCount(final Map<String, Object> params) {
 
-    String ejbql = "select count(*) from CallOutVisit where createdAt >= :startDate AND createdAt < :endDate";
+    String ejbql = "select count(*) from CallOutVisit where createdAt >= :startDateTime AND createdAt < :endDateTime";
     return genericQueryExecutorDAO.findCount(ejbql, params);
   }
-  
+
   /**
    * 
    */
@@ -299,21 +300,32 @@ CallOutVisitService {
     Median median = null;
     Map<String, Object> params = new HashMap<String, Object>(2);
     params.put("startDate", startDate);
-    params.put("endDate", endDate);      
-      String sqlString ="SELECT x.customer, COUNT(x.customer) FROM (" +
-    		  		 "SELECT cv.customer1_impacted AS customer FROM call_out_visit cv where cv.customer1_impacted is not null and trim(cv.customer1_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+ 
-    		  		 " UNION ALL SELECT cv.customer2_impacted AS customer FROM call_out_visit cv where cv.customer2_impacted is not null and trim(cv.customer2_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+ 
-    		  		 " UNION ALL SELECT cv.customer3_impacted AS customer FROM call_out_visit cv where cv.customer3_impacted is not null and trim(cv.customer3_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
-    		  		 " UNION ALL SELECT cv.customer4_impacted AS customer FROM call_out_visit cv where cv.customer4_impacted is not null and trim(cv.customer4_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
-    		  		 ") x "  
-    		  		 +" WHERE x.customer IS NOT NULL"
-    		  		 +" GROUP BY x.customer;";
-   
-      List<Object[]> finalDataList =
-          genericQueryExecutorDAO.executeSQLProjectedQuery(sqlString,params);
-      median = ServiceUtil.mapMedian(0, finalDataList);
+    params.put("endDate", endDate);
+    String sqlString ="SELECT x.customer, COUNT(x.customer) FROM (" +
+        "SELECT cv.customer1_impacted AS customer FROM call_out_visit cv where cv.customer1_impacted is not null and trim(cv.customer1_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
+        " UNION ALL SELECT cv.customer2_impacted AS customer FROM call_out_visit cv where cv.customer2_impacted is not null and trim(cv.customer2_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
+        " UNION ALL SELECT cv.customer3_impacted AS customer FROM call_out_visit cv where cv.customer3_impacted is not null and trim(cv.customer3_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
+        " UNION ALL SELECT cv.customer4_impacted AS customer FROM call_out_visit cv where cv.customer4_impacted is not null and trim(cv.customer4_impacted ) != \"\" and cv.created_at >= :startDate and cv.created_at < :endDate "+
+        ") x "
+        +" WHERE x.customer IS NOT NULL"
+        +" GROUP BY x.customer;";
+
+    List<Object[]> finalDataList =
+        genericQueryExecutorDAO.executeSQLProjectedQuery(sqlString,params);
+    median = ServiceUtil.mapMedian(0, finalDataList);
 
     return median;
+  }
+
+  @Override
+  public Date getMaxDateCreated() {
+    String ejbql = "select max(dv.createdAt) from CallOutVisit dv ";
+    Date date = null;
+    List<Date> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql);
+    if (CollectionUtils.isNotEmpty(list) && list.get(0) != null) {
+      date = list.get(0);
+    }
+    return date;
   }
 
 }

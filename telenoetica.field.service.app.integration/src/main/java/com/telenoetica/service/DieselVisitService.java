@@ -94,4 +94,6 @@ public interface DieselVisitService extends BaseService<DieselVisit> {
 
   Date getMaxDateCreated();
 
+  Median computeDieselReceivedBetween(Date startDateTime, Date endDateTime);
+
 }

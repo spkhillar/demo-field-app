@@ -97,5 +97,7 @@ public interface MaintenanceVisitService extends BaseService<MaintenanceVisit> {
    */
   public List<MaintenanceVisit> findBySiteAndCreatedAtBetween(final Site site,Date forDate);
 
-Median getSpareUsageList(Date startDate, Date endDate);
+  Median getSpareUsageList(Date startDate, Date endDate);
+
+  Date getMaxDateCreated();
 }

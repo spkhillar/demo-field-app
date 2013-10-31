@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -284,7 +285,8 @@ public class MaintenanceVisitServiceImpl extends AbstractBaseService implements 
   @Override
   public long findRecordCount(final Map<String, Object> params) {
 
-    String ejbql = "select count(*) from MaintenanceVisit where createdAt >= :startDate AND createdAt < :endDate";
+    String ejbql =
+        "select count(*) from MaintenanceVisit where createdAt >= :startDateTime AND createdAt < :endDateTime";
     return genericQueryExecutorDAO.findCount(ejbql, params);
   }
 
@@ -297,14 +299,14 @@ public class MaintenanceVisitServiceImpl extends AbstractBaseService implements 
    * @see com.telenoetica.service.MaintenanceVisitService#findBySiteAndCreatedAtBetween(com.telenoetica.jpa.entities.Site)
    */
   @Override
-  public List<MaintenanceVisit> findBySiteAndCreatedAtBetween(final Site site,final Date forDate) {
+  public List<MaintenanceVisit> findBySiteAndCreatedAtBetween(final Site site, final Date forDate) {
     Date startDate;
     Date endDate;
     Calendar currentDate = Calendar.getInstance(); // Get the current date
-    if(forDate == null){
+    if (forDate == null) {
       endDate = new Date();
       endDate = DateUtils.addDays(endDate, -1);
-    }else{
+    } else {
       endDate = forDate;
     }
     endDate = DateUtils.truncate(endDate, Calendar.DATE);
@@ -312,8 +314,7 @@ public class MaintenanceVisitServiceImpl extends AbstractBaseService implements 
     finalEndDate = DateUtils.addSeconds(finalEndDate, 59);
     finalEndDate = DateUtils.addHours(finalEndDate, 23);
     currentDate.setTime(endDate);
-    currentDate.set(Calendar.DAY_OF_MONTH, Calendar.getInstance()
-      .getActualMinimum(Calendar.DAY_OF_MONTH));
+    currentDate.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_MONTH));
     startDate = currentDate.getTime();
     logger.debug(" Site =" + site.getName() + ". Finding Diesel Visit Data from " + startDate + " TO " + finalEndDate);
     return maintenanceVisitDAO.findBySiteAndCreatedAtBetween(site, startDate, finalEndDate);
@@ -327,29 +328,38 @@ public class MaintenanceVisitServiceImpl extends AbstractBaseService implements 
     Median median = null;
     Map<String, Object> params = new HashMap<String, Object>(2);
     params.put("startDate", startDate);
-    params.put("endDate", endDate);      
-      String sqlString ="SELECT x.spare, COUNT(x.spare) FROM ("+
-    		  		"SELECT mv.spares_used_items_replaced1 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced1 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+ 
-    		  		" UNION ALL SELECT mv.spares_used_items_replaced2 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced2 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.spares_used_items_replaced3 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced3 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.spares_used_items_replaced4 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced4 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.spares_used_items_replaced5 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced5 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.spares_used_items_replaced6 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced6 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.cosumables_used1 AS spare FROM maintenance_visit mv where mv.cosumables_used1 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.cosumables_used2 AS spare FROM maintenance_visit mv where mv.cosumables_used2 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.cosumables_used3 AS spare FROM maintenance_visit mv where mv.cosumables_used3 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.cosumables_used4 AS spare FROM maintenance_visit mv where mv.cosumables_used4 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.cosumables_used5 AS spare FROM maintenance_visit mv where mv.cosumables_used5 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" UNION ALL SELECT mv.cosumables_used6 AS spare FROM maintenance_visit mv where mv.cosumables_used6 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"+
-    		  		" ) x " +
-    		  		" WHERE x.spare IS NOT NULL"+
-    		  		" GROUP BY x.spare;";
-   
-      List<Object[]> finalDataList =
-          genericQueryExecutorDAO.executeSQLProjectedQuery(sqlString,params);
-      median = ServiceUtil.mapMedian(0, finalDataList);
+    params.put("endDate", endDate);
+    String sqlString =
+        "SELECT x.spare, COUNT(x.spare) FROM ("
+            + "SELECT mv.spares_used_items_replaced1 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced1 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.spares_used_items_replaced2 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced2 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.spares_used_items_replaced3 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced3 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.spares_used_items_replaced4 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced4 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.spares_used_items_replaced5 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced5 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.spares_used_items_replaced6 AS spare FROM maintenance_visit mv where mv.spares_used_items_replaced6 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.cosumables_used1 AS spare FROM maintenance_visit mv where mv.cosumables_used1 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.cosumables_used2 AS spare FROM maintenance_visit mv where mv.cosumables_used2 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.cosumables_used3 AS spare FROM maintenance_visit mv where mv.cosumables_used3 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.cosumables_used4 AS spare FROM maintenance_visit mv where mv.cosumables_used4 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.cosumables_used5 AS spare FROM maintenance_visit mv where mv.cosumables_used5 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " UNION ALL SELECT mv.cosumables_used6 AS spare FROM maintenance_visit mv where mv.cosumables_used6 is not null and mv.created_at >= :startDate and mv.created_at < :endDate"
+            + " ) x " + " WHERE x.spare IS NOT NULL" + " GROUP BY x.spare;";
+
+    List<Object[]> finalDataList = genericQueryExecutorDAO.executeSQLProjectedQuery(sqlString, params);
+    median = ServiceUtil.mapMedian(0, finalDataList);
 
     return median;
   }
-  
+
+  @Override
+  public Date getMaxDateCreated() {
+    String ejbql = "select max(dv.createdAt) from MaintenanceVisit dv ";
+    Date date = null;
+    List<Date> list = genericQueryExecutorDAO.executeProjectedQuery(ejbql);
+    if (CollectionUtils.isNotEmpty(list) && list.get(0) != null) {
+      date = list.get(0);
+    }
+    return date;
+  }
+
 }

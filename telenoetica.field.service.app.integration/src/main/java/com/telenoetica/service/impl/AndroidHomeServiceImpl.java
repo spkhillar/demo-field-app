@@ -97,25 +97,63 @@ public class AndroidHomeServiceImpl extends AbstractBaseService implements Andro
   @Override
   @Transactional(readOnly = true)
   public List<Integer> getchartData() {
-    Date startDate;
-    Date endDate = new Date();
-    startDate = DateUtils.addDays(endDate, -7);
-    Map<String, Object> param = new HashMap<String, Object>(1);
-    param.put("startDate", startDate);
-    param.put("endDate", endDate);
+    Map<String, Object> param = null;
     List<Integer> chartData = new ArrayList<Integer>(4);
-
-    long rvCount = routineVisitService.findRecordCount(param);
-    long cvCount = callOutVisitService.findRecordCount(param);
-    long dvCount = dieselVisitService.findRecordCount(param);
-    long mvCount = maintenanceVisitService.findRecordCount(param);
-
-    LOGGER.debug("FROM"+startDate+"--TO--"+endDate+".....rvCount="+rvCount+":..cvCount="+cvCount+":dvCount="+dvCount+":mvCount="+mvCount);
+    long rvCount = 0;
+    long cvCount = 0;
+    long dvCount = 0;
+    long mvCount = 0;
+    param = getHomePageLast7DaysParams(0);
+    if (param != null) {
+      rvCount = routineVisitService.findRecordCount(param);
+    }
+    param = getHomePageLast7DaysParams(1);
+    if (param != null) {
+      cvCount = callOutVisitService.findRecordCount(param);
+    }
+    param = getHomePageLast7DaysParams(2);
+    if (param != null) {
+      dvCount = dieselVisitService.findRecordCount(param);
+    }
+    param = getHomePageLast7DaysParams(3);
+    if (param != null) {
+      mvCount = maintenanceVisitService.findRecordCount(param);
+    }
     chartData.add((int) rvCount);
     chartData.add((int) cvCount);
     chartData.add((int) dvCount);
     chartData.add((int) mvCount);
     return chartData;
+  }
+
+  private Map<String, Object> getHomePageLast7DaysParams(int visitType) {
+    Date maxDate = null;
+    Map<String, Object> param = null;
+    switch (visitType) {
+    case 0:
+      maxDate = routineVisitService.getMaxDateCreated();
+      break;
+    case 1:
+      maxDate = callOutVisitService.getMaxDateCreated();
+      break;
+    case 2:
+      maxDate = dieselVisitService.getMaxDateCreated();
+      break;
+    case 3:
+      maxDate = maintenanceVisitService.getMaxDateCreated();
+      break;
+
+    default:
+      break;
+    }
+    if (maxDate != null) {
+      param = new HashMap<String, Object>(2);
+      Date endDate = DateUtils.addHours(maxDate, 1);
+      Date startDate = DateUtils.addDays(endDate, -7);
+      param.put("startDateTime", startDate);
+      param.put("endDateTime", endDate);
+    }
+    return param;
   }
 
   /**

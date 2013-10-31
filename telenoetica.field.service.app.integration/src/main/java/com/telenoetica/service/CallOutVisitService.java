@@ -90,5 +90,7 @@ public interface CallOutVisitService extends BaseService<CallOutVisit> {
    */
   long findRecordCount(Map<String, Object> params);
 
-Median getCustomerImpactedList(Date startDate, Date endDate);
+  Median getCustomerImpactedList(Date startDate, Date endDate);
+
+  Date getMaxDateCreated();
 }

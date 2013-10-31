@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.telenoetica.jpa.entities.MaintenanceVisit;
 import com.telenoetica.service.MaintenanceVisitService;
 import com.telenoetica.service.util.Median;
-import com.telenoetica.service.util.ServiceUtil;
 import com.telenoetica.web.rest.RestResponse;
 import com.telenoetica.web.util.DomainObjectMapper;
 import com.telenoetica.web.util.JqGridResponse;
@@ -272,7 +271,7 @@ public class MaintenanceVisitController extends AbstractJqGridFilterController {
    * 
    * @return the home data object
    */
-  @RequestMapping(value = "/rest/web/sparesUsedMvDashboard", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(value = "/sparesUsedMvDashboard", method = RequestMethod.GET, produces = "application/json")
   @ResponseBody
   public Median dashboardData() {
 	  

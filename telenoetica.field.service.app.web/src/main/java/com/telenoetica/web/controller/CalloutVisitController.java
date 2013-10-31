@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.telenoetica.jpa.entities.CallOutVisit;
 import com.telenoetica.service.CallOutVisitService;
 import com.telenoetica.service.util.Median;
-import com.telenoetica.service.util.ServiceUtil;
 import com.telenoetica.web.rest.RestResponse;
 import com.telenoetica.web.util.DomainObjectMapper;
 import com.telenoetica.web.util.JqGridResponse;
@@ -272,7 +271,7 @@ public class CalloutVisitController extends AbstractJqGridFilterController {
    * 
    * @return the home data object
    */
-  @RequestMapping(value = "/rest/web/customerImpacted", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(value = "/customerImpacted", method = RequestMethod.GET, produces = "application/json")
   @ResponseBody
   public Median getCustomerImpactedData() {
 	    Date endDate = callOutVisitService.getMaxDateCreated();

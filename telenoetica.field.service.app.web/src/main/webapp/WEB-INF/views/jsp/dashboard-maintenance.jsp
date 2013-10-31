@@ -9,9 +9,8 @@
 
 $().ready(function(){
 	
-	var jsonurl = webContextPath + "/maintenance/rest/web/sparesUsedMvDashboard";
-	var homePageData = populateDataForMvScreen(jsonurl);
-	  var data = homePageData;
+	var jsonurl = webContextPath + "/maintenance/sparesUsedMvDashboard";
+	populateDataForMvScreen(jsonurl);
 	 
 	});
 	
@@ -21,7 +20,7 @@ function populateDataForMvScreen(url) {
 	$.ajax({
 		// have to use synchronous here, else the function 
 		// will return before the data is fetched
-		async : false,
+		async : true,
 		url : url,
 		success : function(data) {
 			ret = data.listData;
@@ -33,22 +32,22 @@ function populateDataForMvScreen(url) {
 
 function drawPieChart(data){
 	
-	 var plot1 = jQuery.jqplot ('pieChartForMvDashboard', [data], 	
-			    { 
-		 		  title : "Spares Used/Replaced(Last 30 days)",
-			      seriesDefaults: {
-			        // Make this a pie chart.
-			        renderer: jQuery.jqplot.PieRenderer, 
-			        rendererOptions: {
-			          // Put data labels on the pie slices.
-			          // By default, labels show the percentage of the slice.
-			        	showDataLabels: true,
-			            dataLabels: 'value'
-			        }
-			      }, 
-			      legend: { show:true, location: 'e' }
-			    }
-			  );
+	 $.jqplot ('pieChartForMvDashboard', [data], 	
+    { 
+		  title : "Spares Used/Replaced(Last 30 days)",
+      seriesDefaults: {
+        // Make this a pie chart.
+        renderer: jQuery.jqplot.PieRenderer, 
+        rendererOptions: {
+          // Put data labels on the pie slices.
+          // By default, labels show the percentage of the slice.
+        	showDataLabels: true,
+            dataLabels: 'value'
+        }
+      }, 
+      legend: { show:true, location: 'e' }
+    }
+  );
 	
 }
 </script>
@@ -72,7 +71,7 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<div id="pieChartForMvDashboard" style="height:825px;width:850px;">
+	<div id="pieChartForMvDashboard" style="height:1000px;width:850px;">
 	</div>
 </body>
 </html>

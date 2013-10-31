@@ -8,9 +8,8 @@
 
 $().ready(function(){
 	
-	var jsonurl = webContextPath + "/callout/rest/web/customerImpacted";
-	var homePageData = populateDataForCvScreen(jsonurl);
-	  var data = homePageData;
+	var jsonurl = webContextPath + "/callout/customerImpacted";
+	populateDataForCvScreen(jsonurl);
 		});
 	
 function populateDataForCvScreen(url) {
@@ -18,7 +17,7 @@ function populateDataForCvScreen(url) {
 	$.ajax({
 		// have to use synchronous here, else the function 
 		// will return before the data is fetched
-		async : false,
+		async : true,
 		url : url,
 		success : function(data) {
 			ret = data.listData;
@@ -35,7 +34,7 @@ function drawBarChartForCV(data){
 		        drawGridlines: false
 		    };	
 	 
-	 plot1 = $.jqplot('barChartForCVDashboard', [ data ], {
+	  $.jqplot('barChartForCVDashboard', [ data ], {
 			// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
 			title : "Customer Impacted(Last 30 days)",
 			 series:[{

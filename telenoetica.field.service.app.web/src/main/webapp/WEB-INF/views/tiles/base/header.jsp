@@ -62,6 +62,24 @@ webContextPath="${pageContext.request.contextPath}";
 				<li>
 					<a href="${contextPath}/user/list">User Management</a>				
 				</li>
+				<li>
+					<a href="${contextPath}/admin/site/view">Site</a>				
+				</li>
+				<li>
+					<a href="${contextPath}/admin/fault/view">Fault</a>				
+				</li>
+				<li>
+					<a href="${contextPath}/admin/spare/view">Spare</a>				
+				</li>
+				<li>
+					<a href="${contextPath}/admin/maintenancecategories/view">MaintenanceVisit Type</a>				
+				</li>
+				<li>
+					<a href="${contextPath}/admin/diselvendor/view">Diesel Vendor</a>				
+				</li>
+				<li>
+					<a href="${contextPath}/admin/client/view">Client</a>				
+				</li>
 			</ul>
 		</li>
 		</sec:authorize>

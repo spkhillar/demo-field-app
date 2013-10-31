@@ -30,10 +30,6 @@
 		<put-attribute name="body" value="/WEB-INF/views/tiles/site-visit/maintenance.jsp" />
 	</definition>
 	
-	<definition name="admin.users" extends="base.definition">
-		<put-attribute name="title" value="User Administration" />
-		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/users.jsp" />
-	</definition>
 	<definition name="routine.list" extends="base.definition">
 		<put-attribute name="title" value="Routine Visit Statistics Form" />
 		<put-attribute name="body" value="/WEB-INF/views/tiles/site-visit/routine-visit-statistics.jsp" />
@@ -77,5 +73,35 @@
 	
 	<definition name="app.help" extends="base.definition">
 		<put-attribute name="body" value="/WEB-INF/views/tiles/help/help.jsp" />
+	</definition>
+	
+	<!-- Administration -->
+	<definition name="admin.users" extends="base.definition">
+		<put-attribute name="title" value="User Administration" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/users.jsp" />
+	</definition>
+	<definition name="admin.sites" extends="base.definition">
+		<put-attribute name="title" value="Site Administration" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/sites.jsp" />
+	</definition>
+	<definition name="admin.faults" extends="base.definition">
+		<put-attribute name="title" value="Site Administration" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/faults.jsp" />
+	</definition>
+	<definition name="admin.spares" extends="base.definition">
+		<put-attribute name="title" value="Site Administration" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/spares.jsp" />
+	</definition>
+	<definition name="admin.maintenancecategories" extends="base.definition">
+		<put-attribute name="title" value="Site Administration" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/maintenance-categories.jsp" />
+	</definition>
+	<definition name="admin.diselvendor" extends="base.definition">
+		<put-attribute name="title" value="Site Administration" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/diesel-vendor.jsp" />
+	</definition>
+	<definition name="admin.client" extends="base.definition">
+		<put-attribute name="title" value="Site Administration" />
+		<put-attribute name="body" value="/WEB-INF/views/tiles/admin/clients.jsp" />
 	</definition>
 </tiles-definitions>

@@ -6,11 +6,13 @@ package com.telenoetica.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.telenoetica.jpa.entities.MaintenanceVisitCategory;
 import com.telenoetica.jpa.repositories.MaintenanceVisitCategoryDAO;
 import com.telenoetica.service.MaintenanceVisitCategoryService;
+import com.telenoetica.service.util.ServiceUtil;
 
 /**
  * The Class MaintenanceVisitCategoryServiceImpl.
@@ -69,6 +71,11 @@ public class MaintenanceVisitCategoryServiceImpl implements MaintenanceVisitCate
   @Override
   public List<MaintenanceVisitCategory> getCategories() {
     return maintenanceVisitCategoryDAO.findAll();
+  }
+
+  @Override
+  public Page<MaintenanceVisitCategory> findALL(Integer page, Integer rows, String sord, String sidx) {
+    return maintenanceVisitCategoryDAO.findAll(ServiceUtil.getPage(page, rows, sord, sidx));
   }
 
 }

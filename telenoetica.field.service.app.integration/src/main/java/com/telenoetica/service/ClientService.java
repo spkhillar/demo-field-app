@@ -5,6 +5,8 @@ package com.telenoetica.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.telenoetica.jpa.entities.Client;
 
 /**
@@ -18,4 +20,6 @@ public interface ClientService extends BaseService<Client>{
    * @return the clients
    */
   List<Client> getClients();
+
+  Page<Client> findALL(Integer page, Integer rows, String sord, String sidx);
 }

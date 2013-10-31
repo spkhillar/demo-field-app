@@ -5,6 +5,8 @@ package com.telenoetica.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.telenoetica.jpa.entities.Fault;
 
 /**
@@ -18,4 +20,6 @@ public interface FaultService extends BaseService<Fault>{
    * @return the faults
    */
   List<Fault> getFaults();
+
+  Page<Fault> findALL(int page, int rows, String sortOrder, String orderByField);
 }

@@ -137,7 +137,7 @@
 					postData : {},
 					rowNum : 20,
 					rowList : [ 20, 30, 40, 50 ],
-					height : 450,
+					height : 475,
 					width : 900,
 					rownumbers : true,
 					pager : '#pager',

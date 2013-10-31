@@ -36,4 +36,6 @@ public interface SiteService extends BaseService<Site>{
    * @return the site
    */
   Site findSite(String name);
+
+  Page<Site> findALL(int page, int rows, String sortOrder, String orderByField);
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.telenoetica.jpa.entities.Site;
 import com.telenoetica.jpa.repositories.SiteDAO;
 import com.telenoetica.service.SiteService;
+import com.telenoetica.service.util.ServiceUtil;
 
 /**
  * The Class SiteServiceImpl.
@@ -98,6 +99,11 @@ public class SiteServiceImpl implements SiteService {
   @Override
   public Site findSite(final String name) {
     return siteDAO.findByName(name);
+  }
+
+  @Override
+  public Page<Site> findALL(int page, int rows, String sortOrder, String orderByField) {
+    return siteDAO.findAll(ServiceUtil.getPage(page, rows, sortOrder, orderByField));
   }
 
 }

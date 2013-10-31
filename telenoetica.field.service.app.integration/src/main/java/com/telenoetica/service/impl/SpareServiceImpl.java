@@ -6,12 +6,14 @@ package com.telenoetica.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.telenoetica.jpa.entities.Spare;
 import com.telenoetica.jpa.repositories.SpareDAO;
 import com.telenoetica.service.SpareService;
+import com.telenoetica.service.util.ServiceUtil;
 
 /**
  * The Class SpareServiceImpl.
@@ -70,6 +72,11 @@ public class SpareServiceImpl implements SpareService {
   @Override
   public List<Spare> getSpares() {
     return spareDAO.findAll(new Sort("name"));
+  }
+
+  @Override
+  public Page<Spare> findALL(Integer page, Integer rows, String sord, String sidx) {
+    return spareDAO.findAll(ServiceUtil.getPage(page, rows, sord, sidx));
   }
 
 }

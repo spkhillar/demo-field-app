@@ -12,6 +12,8 @@ import com.telenoetica.jpa.entities.Client;
 import com.telenoetica.jpa.entities.DieselVendor;
 import com.telenoetica.jpa.entities.DieselVisit;
 import com.telenoetica.jpa.entities.Fault;
+import com.telenoetica.jpa.entities.MaintenanceVisit;
+import com.telenoetica.jpa.entities.MaintenanceVisitCategory;
 import com.telenoetica.jpa.entities.Site;
 import com.telenoetica.jpa.entities.Spare;
 import com.telenoetica.jpa.entities.User;
@@ -21,6 +23,8 @@ import com.telenoetica.service.ClientService;
 import com.telenoetica.service.DieselVendorService;
 import com.telenoetica.service.DieselVisitService;
 import com.telenoetica.service.FaultService;
+import com.telenoetica.service.MaintenanceVisitCategoryService;
+import com.telenoetica.service.MaintenanceVisitService;
 import com.telenoetica.service.PopulatorService;
 import com.telenoetica.service.SiteService;
 import com.telenoetica.service.SpareService;
@@ -56,6 +60,12 @@ public class PopulatorServiceImpl implements PopulatorService {
 
   @Autowired
   private CallOutVisitService callOutVisitService;
+
+  @Autowired
+  private MaintenanceVisitCategoryService maintenanceVisitCategoryService;
+
+  @Autowired
+  private MaintenanceVisitService maintenanceVisitService;
 
   @Override
   public void populateDieselVisit(int numberOfRecords, int lastDays) {
@@ -124,7 +134,7 @@ public class PopulatorServiceImpl implements PopulatorService {
       String equipmentComponentCausedFault = spareList.get(index).getName();
       String equipmentComponentRepaired = equipmentComponentCausedFault;
       CallOutVisit callOutVisit =
-          new CallOutVisit(user, null, String.valueOf(ServiceUtil.randomInt(0, 999999)), "CALL-"
+          new CallOutVisit(user, null, String.valueOf(ServiceUtil.randomInt(0, 9999999)), "CALL-"
               + ServiceUtil.randomInt(0, 999999), timeComplainReceived, timeReachedToSite, timeFaultResolved,
               customer1Impacted, customer2Impacted, customer3Impacted, customer4Impacted, mainCategoryOfFault,
               equipmentComponentCausedFault, equipmentComponentRepaired, null, "Temporary", null, createdAt);
@@ -137,7 +147,54 @@ public class PopulatorServiceImpl implements PopulatorService {
 
   @Override
   public void populateMaintenanceVisit(int numberOfRecords, int lastDays) {
+    List<Site> siteList = siteService.getSites();
+    List<Spare> spareList = spareService.getSpares();
+    List<MaintenanceVisitCategory> maintenanceVisitCategoryList = maintenanceVisitCategoryService.getCategories();
 
+    int siteListSize = siteList.size();
+    int spareListSize = spareList.size();
+    int maintenanceVisitCategoryListSize = maintenanceVisitCategoryList.size();
+
+    User user = userService.findByUserName("root");
+    String ejbql = "select count(*) from MaintenanceVisit";
+    long count1 = genericQueryExecutorDAO.findCount(ejbql, null);
+
+    for (int i = 0; i < numberOfRecords; i++) {
+      int index = ServiceUtil.randomInt(0, siteListSize);
+      Site site = siteList.get(index);
+      index = ServiceUtil.randomInt(0, maintenanceVisitCategoryListSize);
+      String categoryOfMaintenance = maintenanceVisitCategoryList.get(index).getName();
+      index = ServiceUtil.randomInt(0, spareListSize);
+      String sparesUsedItemsReplaced1=spareList.get(index).getName();
+      index = ServiceUtil.randomInt(0, spareListSize);
+      String sparesUsedItemsReplaced2=spareList.get(index).getName();
+      index = ServiceUtil.randomInt(0, spareListSize);
+      String sparesUsedItemsReplaced3=spareList.get(index).getName();
+      index = ServiceUtil.randomInt(0, spareListSize);
+      String sparesUsedItemsReplaced4=spareList.get(index).getName();
+      index = ServiceUtil.randomInt(0, spareListSize);
+      String sparesUsedItemsReplaced5=spareList.get(index).getName();
+      index = ServiceUtil.randomInt(0, spareListSize);
+      String sparesUsedItemsReplaced6=spareList.get(index).getName();
+      String cosumablesUsed1 = sparesUsedItemsReplaced1;
+      String cosumablesUsed2 = sparesUsedItemsReplaced2;
+      String cosumablesUsed3 = sparesUsedItemsReplaced3;
+      String cosumablesUsed4 = sparesUsedItemsReplaced4;
+      String cosumablesUsed5 = sparesUsedItemsReplaced5;
+      String cosumablesUsed6 = sparesUsedItemsReplaced6;
+      Long runHoursAfterPmdG1 = Long.valueOf(ServiceUtil.randomInt(0, 30000));
+      Long runHourAfterPmdG2 = Long.valueOf(ServiceUtil.randomInt(0, 30000));
+      Date createdAt = ServiceUtil.randomDate(lastDays);
+      MaintenanceVisit maintenanceVisit =
+          new MaintenanceVisit(user, null, String.valueOf(ServiceUtil.randomInt(0, 99999999)), categoryOfMaintenance,
+            sparesUsedItemsReplaced1, sparesUsedItemsReplaced2, sparesUsedItemsReplaced3, sparesUsedItemsReplaced4,
+            sparesUsedItemsReplaced5, sparesUsedItemsReplaced6, cosumablesUsed1, cosumablesUsed2, cosumablesUsed3,
+            cosumablesUsed4, cosumablesUsed5, cosumablesUsed6, runHoursAfterPmdG1, runHourAfterPmdG2, createdAt);
+      maintenanceVisit.setSiteId(site.getName());
+      maintenanceVisitService.saveOrUpdate(maintenanceVisit);
+    }
+    long count2 = genericQueryExecutorDAO.findCount(ejbql, null);
+    System.err.println(count1 + "...-----------Count-----------" + count2);
   }
 
 }

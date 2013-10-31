@@ -17,8 +17,15 @@ public class PopulatorController extends BaseController {
 
   @RequestMapping(value = "/diesel/{records}/{lastDays}")
   @ResponseBody
-  public String dieselMedianReport(@PathVariable int records, @PathVariable int lastDays) {
+  public String diesel(@PathVariable int records, @PathVariable int lastDays) {
     populatorService.populateDieselVisit(records, lastDays);
+    return "Done";
+  }
+
+  @RequestMapping(value = "/callout/{records}/{lastDays}")
+  @ResponseBody
+  public String callOut(@PathVariable int records, @PathVariable int lastDays) {
+    populatorService.populateCalloutVisit(records, lastDays);
     return "Done";
   }
 }

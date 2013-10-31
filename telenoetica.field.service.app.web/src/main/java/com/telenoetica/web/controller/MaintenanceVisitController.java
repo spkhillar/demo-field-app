@@ -3,6 +3,7 @@
  */
 package com.telenoetica.web.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.telenoetica.jpa.entities.MaintenanceVisit;
 import com.telenoetica.service.MaintenanceVisitService;
+import com.telenoetica.service.util.Median;
+import com.telenoetica.service.util.ServiceUtil;
 import com.telenoetica.web.rest.RestResponse;
 import com.telenoetica.web.util.DomainObjectMapper;
 import com.telenoetica.web.util.JqGridResponse;
@@ -262,5 +266,25 @@ public class MaintenanceVisitController extends AbstractJqGridFilterController {
   @Override
   public Map<String, String> getFilterExcludedPropertyOrderMapping() {
     return excludedPropOrderMapping;
+  }
+  
+  /**
+   * 
+   * @return the home data object
+   */
+  @RequestMapping(value = "/rest/web/sparesUsedMvDashboard", method = RequestMethod.GET, produces = "application/json")
+  @ResponseBody
+  public Median dashboardData() {
+	  
+	  Date endDate = maintenanceVisitService.getMaxDateCreated();
+	    if (endDate == null) {
+	        endDate = new Date();
+	      } else {
+	        endDate = DateUtils.addHours(endDate, 1);
+	      }
+	      Date startDate = DateUtils.addDays(endDate, -30);
+
+	    Median median = maintenanceVisitService.getSpareUsageList( startDate, endDate);
+	    return median;
   }
 }

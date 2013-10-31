@@ -9,7 +9,7 @@
 
 $().ready(function(){
 	
-	var jsonurl = webContextPath + "/rest/web/dashboardData";
+	var jsonurl = webContextPath + "/maintenance/rest/web/sparesUsedMvDashboard";
 	var homePageData = populateDataForMvScreen(jsonurl);
 	  var data = homePageData;
 	 
@@ -33,8 +33,9 @@ function populateDataForMvScreen(url) {
 
 function drawPieChart(data){
 	
-	 var plot1 = jQuery.jqplot ('pieChartForMvDashboard', [data], 
+	 var plot1 = jQuery.jqplot ('pieChartForMvDashboard', [data], 	
 			    { 
+		 		  title : "Spares Used/Replaced(Last 30 days)",
 			      seriesDefaults: {
 			        // Make this a pie chart.
 			        renderer: jQuery.jqplot.PieRenderer, 

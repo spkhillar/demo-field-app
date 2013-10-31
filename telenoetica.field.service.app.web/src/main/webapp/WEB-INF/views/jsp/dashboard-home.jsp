@@ -176,7 +176,7 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<div style="height: 700px;" id ="dashBoardHomeDiv">
+	<div style="height: auto;" id ="dashBoardHomeDiv">
 	<div class="container" style="overflow: hidden; width: 100%">	
 		<div class="left">	
 			<div id="chartLast7DaysDiv" style="height:300px;">

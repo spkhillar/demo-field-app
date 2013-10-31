@@ -292,48 +292,4 @@ public class HomeController extends BaseController {
       final HttpServletResponse httpServletResponse) {
     androidHomeService.exportAndroidAppHelp(httpServletResponse);
   }
-  
-  /**
-   * android rest login.
-   * 
-   * @return the home data object
-   */
-  @RequestMapping(value = "/rest/web/dashboardData", method = RequestMethod.GET, produces = "application/json")
-  @ResponseBody
-  public Median dashboardData() {
-	  
-	  	/*Date endDate = new Date();
-	    Date startDate = DateUtils.addDays(endDate, -30);*/
-	    Date startdate = ServiceUtil.getDateInFormat("31/01/2013", "dd/MM/yyyy");
-	    Date enddate = ServiceUtil.getDateInFormat("31/12/2013", "dd/MM/yyyy");
-
-	    Median median = maintenanceVisitService.getSpareUsageList( startdate, enddate);
-	    return median;
-	  
-	  /*Map<String, Object> data = new HashMap<String, Object>();
-	    data.put( "Heavy Industry1", "12" );
-	    data.put( "Heavy Industry2", "25" );
-	    data.put( "Heavy Industry3", "50" );
-	    data.put( "Heavy Industry4", "100" );
-    return data;*/
-  }
-  
-  /**
-   * android rest login.
-   * 
-   * @return the home data object
-   */
-  @RequestMapping(value = "/rest/web/customerImpacted", method = RequestMethod.GET, produces = "application/json")
-  @ResponseBody
-  public Median getCustomerImpactedData() {
-	  
-	  	/*Date endDate = new Date();
-	    Date startDate = DateUtils.addDays(endDate, -30);*/
-	    Date startdate = ServiceUtil.getDateInFormat("31/01/2013", "dd/MM/yyyy");
-	    Date enddate = ServiceUtil.getDateInFormat("31/12/2013", "dd/MM/yyyy");
-
-	    Median median = callOutVisitService.getCustomerImpactedList( startdate, enddate);
-	    return median;
-  }
-
 }

@@ -8,7 +8,7 @@
 
 $().ready(function(){
 	
-	var jsonurl = webContextPath + "/rest/web/customerImpacted";
+	var jsonurl = webContextPath + "/callout/rest/web/customerImpacted";
 	var homePageData = populateDataForCvScreen(jsonurl);
 	  var data = homePageData;
 		});
@@ -29,23 +29,39 @@ function populateDataForCvScreen(url) {
 }
 
 function drawBarChartForCV(data){
-	 var plot1 = jQuery.jqplot ('barChartForCVDashboard',  [data], 
-			    { 
-				  title: 'Top Customers Impacted',
-				    series:[{renderer:$.jqplot.BarRenderer}],
-				    axesDefaults: {
-				        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
-				        tickOptions: {
-				          angle: -30,
-				          fontSize: '10pt'
-				        }
-				    },
-				    axes: {
-				      xaxis: {
-				        renderer: $.jqplot.CategoryAxisRenderer
-				      }
-				    }
-				  });
+	 var grid = {
+		        gridLineWidth: 0.5,
+		        gridLineColor: 'rgb(235,235,235)',
+		        drawGridlines: false
+		    };	
+	 
+	 plot1 = $.jqplot('barChartForCVDashboard', [ data ], {
+			// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+			title : "Customer Impacted(Last 30 days)",
+			 series:[{
+		            renderer:$.jqplot.BarRenderer,
+		            rendererOptions: {
+		                barWidth: 10
+		            },
+		            pointLabels: { 
+		            	show: true 
+		            }
+		        }],
+		        axesDefaults: {
+		            tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+		            tickOptions: {
+		              angle: -30,
+		              fontSize: '10pt'
+		            }
+		        },
+		        axes: {
+		            xaxis: {
+		                renderer: $.jqplot.CategoryAxisRenderer,
+		                autoscale : true,
+		            }
+		        },
+		        grid: grid
+		    });
 }
 </script>
 <style type="text/css">
@@ -68,7 +84,8 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<div id="barChartForCVDashboard" style="height:825px;width:850px;">
+<div style="height: 500px; width: 875px; overflow: scroll;"> 
+	<div id="barChartForCVDashboard" style="height:500px;width:1450px;"> </div>
 	</div>
 </body>
 </html>

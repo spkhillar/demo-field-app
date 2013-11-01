@@ -49,7 +49,10 @@ var webContextPathDiesel = "${pageContext.request.contextPath}";;
 		        drawGridlines: false
 		    };	
 		     
-		    plot1 = $.jqplot('dieselMedianChart', [listData], {
+		    plot1 = $.jqplot('dieselMedianChart', [listData], { 
+		    	animate: true,
+		        // Will animate plot on calls to plot1.replot({resetAxes:true})
+		        animateReplot: true,
 		        series:[{
 		            renderer:$.jqplot.BarRenderer,
 		            rendererOptions: {

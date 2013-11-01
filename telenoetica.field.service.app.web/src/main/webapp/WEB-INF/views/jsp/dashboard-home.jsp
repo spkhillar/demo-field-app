@@ -88,6 +88,9 @@
 		 
 		 plot1 = $.jqplot('chartLast7DaysDiv', [ input ], {
 				// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+				 animate: true,
+      		  // Will animate plot on calls to plot1.replot({resetAxes:true})
+        		animateReplot: true,
 				title : "Visit Analysis Chart(Last 7 Days)",
 				 series:[{
 			            renderer:$.jqplot.BarRenderer,
@@ -128,6 +131,9 @@
 		 
 		 plot1 = $.jqplot('chartLast7DaysDieselDiv', [ input ], {
 				// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+				 animate: true,
+      		  // Will animate plot on calls to plot1.replot({resetAxes:true})
+        		animateReplot: true,
 				title : "Disel Received (Last 7 Days)",
 				 series:[{
 			            renderer:$.jqplot.BarRenderer,

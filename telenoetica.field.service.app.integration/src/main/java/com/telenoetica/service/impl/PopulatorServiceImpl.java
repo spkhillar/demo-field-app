@@ -14,6 +14,7 @@ import com.telenoetica.jpa.entities.DieselVisit;
 import com.telenoetica.jpa.entities.Fault;
 import com.telenoetica.jpa.entities.MaintenanceVisit;
 import com.telenoetica.jpa.entities.MaintenanceVisitCategory;
+import com.telenoetica.jpa.entities.RoutineVisit;
 import com.telenoetica.jpa.entities.Site;
 import com.telenoetica.jpa.entities.Spare;
 import com.telenoetica.jpa.entities.User;
@@ -26,6 +27,7 @@ import com.telenoetica.service.FaultService;
 import com.telenoetica.service.MaintenanceVisitCategoryService;
 import com.telenoetica.service.MaintenanceVisitService;
 import com.telenoetica.service.PopulatorService;
+import com.telenoetica.service.RoutineVisitService;
 import com.telenoetica.service.SiteService;
 import com.telenoetica.service.SpareService;
 import com.telenoetica.service.UserService;
@@ -66,6 +68,9 @@ public class PopulatorServiceImpl implements PopulatorService {
 
   @Autowired
   private MaintenanceVisitService maintenanceVisitService;
+
+  @Autowired
+  private RoutineVisitService routineVisitService;
 
   @Override
   public void populateDieselVisit(int numberOfRecords, int lastDays) {
@@ -165,17 +170,17 @@ public class PopulatorServiceImpl implements PopulatorService {
       index = ServiceUtil.randomInt(0, maintenanceVisitCategoryListSize);
       String categoryOfMaintenance = maintenanceVisitCategoryList.get(index).getName();
       index = ServiceUtil.randomInt(0, spareListSize);
-      String sparesUsedItemsReplaced1=spareList.get(index).getName();
+      String sparesUsedItemsReplaced1 = spareList.get(index).getName();
       index = ServiceUtil.randomInt(0, spareListSize);
-      String sparesUsedItemsReplaced2=spareList.get(index).getName();
+      String sparesUsedItemsReplaced2 = spareList.get(index).getName();
       index = ServiceUtil.randomInt(0, spareListSize);
-      String sparesUsedItemsReplaced3=spareList.get(index).getName();
+      String sparesUsedItemsReplaced3 = spareList.get(index).getName();
       index = ServiceUtil.randomInt(0, spareListSize);
-      String sparesUsedItemsReplaced4=spareList.get(index).getName();
+      String sparesUsedItemsReplaced4 = spareList.get(index).getName();
       index = ServiceUtil.randomInt(0, spareListSize);
-      String sparesUsedItemsReplaced5=spareList.get(index).getName();
+      String sparesUsedItemsReplaced5 = spareList.get(index).getName();
       index = ServiceUtil.randomInt(0, spareListSize);
-      String sparesUsedItemsReplaced6=spareList.get(index).getName();
+      String sparesUsedItemsReplaced6 = spareList.get(index).getName();
       String cosumablesUsed1 = sparesUsedItemsReplaced1;
       String cosumablesUsed2 = sparesUsedItemsReplaced2;
       String cosumablesUsed3 = sparesUsedItemsReplaced3;
@@ -197,4 +202,30 @@ public class PopulatorServiceImpl implements PopulatorService {
     System.err.println(count1 + "...-----------Count-----------" + count2);
   }
 
+  @Override
+  public void populateRoutineVisit(int numberOfRecords, int lastDays) {
+    List<Site> siteList = siteService.getSites();
+    int siteListSize = siteList.size();
+    User user = userService.findByUserName("root");
+    String ejbql = "select count(*) from RoutineVisit";
+    long count1 = genericQueryExecutorDAO.findCount(ejbql, null);
+    for (int i = 0; i < numberOfRecords; i++) {
+      int index = ServiceUtil.randomInt(0, siteListSize);
+      Site site = siteList.get(index);
+      RoutineVisit routineVisit =
+          new RoutineVisit(user, null, String.valueOf(ServiceUtil.randomInt(0, 999999999)), Long.valueOf(ServiceUtil
+            .randomInt(0, 6000)), Long.valueOf(ServiceUtil.randomInt(0, 6000)), Long.valueOf(ServiceUtil.randomInt(0,
+              30000)), Long.valueOf(ServiceUtil.randomInt(0, 30000)), Long.valueOf(ServiceUtil.randomInt(0, 400)),
+              Long.valueOf(ServiceUtil.randomInt(0, 400)), Long.valueOf(ServiceUtil.randomInt(0, 400)),
+              Long.valueOf(ServiceUtil.randomInt(0, 400)), Long.valueOf(ServiceUtil.randomInt(0, 400)),
+              Long.valueOf(ServiceUtil.randomInt(0, 999)), Long.valueOf(ServiceUtil.randomInt(0, 99)),
+              Long.valueOf(ServiceUtil.randomInt(0, 999)), Long.valueOf(ServiceUtil.randomInt(0, 50)),
+              Long.valueOf(ServiceUtil.randomInt(0, 2000)), true, false, true, true, ServiceUtil.randomDate(lastDays));
+      routineVisit.setSiteId(site.getName());
+      routineVisitService.saveOrUpdate(routineVisit);
+    }
+
+    long count2 = genericQueryExecutorDAO.findCount(ejbql, null);
+    System.err.println(count1 + "...-----------Count-----------" + count2);
+  }
 }

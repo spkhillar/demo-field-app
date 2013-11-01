@@ -35,4 +35,11 @@ public class PopulatorController extends BaseController {
     populatorService.populateMaintenanceVisit(records, lastDays);
     return "Done";
   }
+
+  @RequestMapping(value = "/routine/{records}/{lastDays}")
+  @ResponseBody
+  public String routine(@PathVariable int records, @PathVariable int lastDays) {
+    populatorService.populateRoutineVisit(records, lastDays);
+    return "Done";
+  }
 }

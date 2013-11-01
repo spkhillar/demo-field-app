@@ -8,11 +8,9 @@
 <script type="text/javascript">
 
 $().ready(function(){
-	
 	var jsonurl = webContextPath + "/maintenance/sparesUsedMvDashboard";
 	populateDataForMvScreen(jsonurl);
-	 
-	});
+});
 	
 	
 function populateDataForMvScreen(url) {
@@ -31,11 +29,9 @@ function populateDataForMvScreen(url) {
 }
 
 function drawPieChart(data){
-	
-	 $.jqplot ('pieChartForMvDashboard', [data], 	
-    { 
-		  title : "Spares Used/Replaced(Last 30 days)",
-      seriesDefaults: {
+	 $.jqplot ('pieChartForMvDashboard', [data], { 
+		title : "Spares Used/Replaced(Last 30 days)",
+      	seriesDefaults: {
         // Make this a pie chart.
         renderer: jQuery.jqplot.PieRenderer, 
         rendererOptions: {
@@ -45,7 +41,7 @@ function drawPieChart(data){
             dataLabels: 'value'
         }
       }, 
-      legend: { show:true, location: 'e' }
+      	legend: { show:true, location: 'e' }
     }
   );
 	

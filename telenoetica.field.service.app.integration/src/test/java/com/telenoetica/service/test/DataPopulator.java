@@ -15,8 +15,13 @@ public class DataPopulator extends BaseServiceTest {
     populatorService.populateCalloutVisit(10, 30);
   }
 
-  @Test
+  // @Test
   public void populateMaintenanceVisit() {
     populatorService.populateMaintenanceVisit(10, 30);
+  }
+
+  @Test
+  public void populateRoutineVisit() {
+    populatorService.populateRoutineVisit(10, 30);
   }
 }

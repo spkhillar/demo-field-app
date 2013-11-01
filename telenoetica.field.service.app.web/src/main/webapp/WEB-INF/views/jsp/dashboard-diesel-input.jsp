@@ -58,7 +58,10 @@
 		        drawGridlines: false
 		    };	
 		     
-		    plot1 = $.jqplot('dieselTopConsumers', [listData], {
+		    plot1 = $.jqplot('dieselTopConsumers', [listData], { 
+		    	animate: true,
+		        // Will animate plot on calls to plot1.replot({resetAxes:true})
+		        animateReplot: true,
 		    	title : "Top 10 Diesel Consumers(Last 30 Days)",
 		        series:[{
 		            renderer:$.jqplot.BarRenderer,

@@ -8,4 +8,6 @@ public interface PopulatorService {
   void populateCalloutVisit(int numberOfRecords, int lastDays);
 
   void populateMaintenanceVisit(int numberOfRecords, int lastDays);
+
+  void populateRoutineVisit(int numberOfRecords, int lastDays);
 }

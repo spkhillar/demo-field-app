@@ -36,7 +36,10 @@ function drawBarChartForCV(data){
 	 
 	  $.jqplot('barChartForCVDashboard', [ data ], {
 			// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
-			title : "Customer Impacted(Last 30 days)",
+			title : "Customer Impacted(Last 30 days)", 
+			animate: true,
+	        // Will animate plot on calls to plot1.replot({resetAxes:true})
+	        animateReplot: true,
 			 series:[{
 		            renderer:$.jqplot.BarRenderer,
 		            rendererOptions: {
@@ -83,7 +86,7 @@ div.right {
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<div style="height: 500px; width: 875px; overflow: scroll;"> 
+<div style="height: 525px; width: 875px; overflow: scroll;"> 
 	<div id="barChartForCVDashboard" style="height:500px;width:1450px;"> </div>
 	</div>
 </body>

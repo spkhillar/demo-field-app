@@ -7,6 +7,7 @@
 <spring:url value="/resources/css/screen.css" var="resourceCmxUrl"/>
 <spring:url value="/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" var="resourceJqUiCssUrl"/>
 <spring:url value="/resources/css/jquery.jqplot.min.css" var="resourceJqplotCssUrl"/>
+
 <spring:url value="/resources/js/jquery-1.9.1.min.js" var="resourceJq1Url"/>
 <spring:url value="/resources/js/jquery.validate.min.js" var="resourceJqvUrl"/>
 <spring:url value="/resources/js/application.js" var="resourceAppJsUrl"/>

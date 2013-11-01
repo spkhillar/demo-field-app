@@ -3,7 +3,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page session="false"%>
 <html>
-<jsp:include page="dashboard-main.jsp"></jsp:include>
 <head>
 <script type="text/javascript">
 	$().ready(function() {

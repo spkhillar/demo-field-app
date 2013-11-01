@@ -66,7 +66,7 @@
 		        series:[{
 		            renderer:$.jqplot.BarRenderer,
 		            rendererOptions: {
-		                barWidth: 10
+		                barWidth: 30
 		            },
 		            pointLabels: { 
 		            	show: true 

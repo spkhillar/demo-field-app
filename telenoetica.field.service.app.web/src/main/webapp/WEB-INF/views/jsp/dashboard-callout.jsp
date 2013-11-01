@@ -43,7 +43,7 @@ function drawBarChartForCV(data){
 			 series:[{
 		            renderer:$.jqplot.BarRenderer,
 		            rendererOptions: {
-		                barWidth: 10
+		                barWidth: 15
 		            },
 		            pointLabels: { 
 		            	show: true 
